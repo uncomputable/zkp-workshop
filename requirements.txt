@@ -1,3 +1,2 @@
 notebook
-sage
 ipympl

@@ -1,0 +1,3 @@
+notebook
+ipympl
+sagemath-standard
