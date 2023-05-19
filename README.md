@@ -1,6 +1,6 @@
 # Zero-Knowledge Proof Workshop
 
-Everyone talks about zero-knowledge proofs (ZKP), but who understands them? How can a proof consist of bytes, information, without leaking any knowledge? Why should I trust such a proof? In this workshop we go over the fundamentals and build a small ZKP system in Python. We will cover some math, but no PhD is required :) Everything will be explained in code.
+Everyone talks about zero-knowledge proofs (ZKP), but who understands them? How can a proof consist of bytes, information, without leaking any knowledge? Why should I trust such a proof? In this workshop we go over the fundamentals and build a small ZKP system in Python. We will cover some math, but no PhD is required 😁 Everything will be explained in code.
 
 We will _not_ learn how to build the latest SNARKs / STARKs or how to do on-chain validity rollups. To build intuition, we must start small and work our way up. This stuff is hard, but there is a method to the madness. My goal is to make ZKP seem less like magic and more like trustworthy math.  
   
