@@ -52,3 +52,9 @@ Second is an [introduction to interactive proofs](https://github.com/uncomputabl
 Finally [we look at Schnorr](https://github.com/uncomputable/zkp-workshop/blob/master/03-schnorr.ipynb) which is a ZKP that exists on Bitcoin today!
 
 So far there are no other chapters, but there are plans for more if there is demand.
+
+## Recommended reading
+
+- [Number theory explained from first principles](https://explained-from-first-principles.com/number-theory/)
+- [Tackling bulletproofs](https://github.com/uncomputable/tackling-bulletproofs)
+- [From zero (knowledge) to bulletproofs](https://github.com/AdamISZ/from0k2bp)
