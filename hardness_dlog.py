@@ -3,10 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider, Button
 #%matplotlib ipympl
 
-# Small elliptic curve
-_F = FiniteField(103)
-_C = EllipticCurve([_F(0), _F(5)])
-_One = _C.gens()[0]
+from myec import *
 
 # Customization
 marker_color='#283F4E' 
@@ -16,13 +13,13 @@ button_hover_color = 'skyblue'
 
 # Skeleton
 fig, ax = plt.subplots(subplot_kw = dict(aspect="equal"))
-ax.set_xlim(0,103)
-ax.set_ylim(0,103)
+ax.set_xlim(0, MAX_COORDINATE)
+ax.set_ylim(0, MAX_COORDINATE)
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 
-init_x, init_y = _One.xy()
-scat = ax.scatter([init_x], [init_y], c=marker_color, s=marker_size)
+init_x, init_y = ONE_POINT.xy()
+scat = ax.scatter([init_x.value], [init_y.value], c=marker_color, s=marker_size)
 
 # Iteration slider
 ax_slider = fig.add_axes([0.1, 0.1, 0.05, 0.75])  # [left, bottom, width, height]
@@ -30,15 +27,16 @@ slider = Slider(
     ax=ax_slider,
     label="Point number",
     valmin=0,
-    valmax=96,
+    valmax=NUMBER_POINTS,
     valstep=1,
     valinit=1,
     orientation="vertical"
 )
 
 def update(n):
-    x, y = (n * _One).xy()
-    scat.set_offsets(np.column_stack((x, y)))
+    x, y = (Scalar(n) * ONE_POINT).xy()
+    scat.set_offsets([[x.value, y.value]])
+    # scat.set_offsets(np.column_stack((x.value, y.value)))
     fig.canvas.draw_idle()
 
 slider.on_changed(update)
