@@ -1,6 +1,8 @@
 with (import <nixpkgs> {});
 let
   my-python-packages = python-packages: with python-packages; [
+    matplotlib
+    numpy
     notebook
     ipympl
   ];
@@ -9,6 +11,5 @@ in
   mkShell {
     buildInputs = [
       my-python
-      sage
     ];
   }
