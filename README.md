@@ -21,26 +21,10 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Sadly sage cannot be installed via pip, at least on my system.
-
-[Here is the package for sage in various distributions](https://repology.org/project/sagemath/versions).
-
-```
-apt install sagemath
-```
-
-[Here are the official installation instructions](https://doc.sagemath.org/html/en/installation/).
-
-For the adventurous, try building sage with the experimental pip package.
-
-```
-pip install -r requirements_with_sage.txt
-```
-
 ## Running
 
 ```
-sage -n jupyter
+jupyter notebook
 ```
 
 ## Structure
