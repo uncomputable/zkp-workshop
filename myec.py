@@ -381,6 +381,11 @@ class AffinePoint:
 
         raise ArithmeticError
 
+    def into_projective(self) -> "ProjectivePoint":
+        if self.is_zero():
+            return ZERO_PROJ_POINT
+        return ProjectivePoint(self.x, self.y, Coordinate(1))
+
 
 ZERO_POINT = AffinePoint(None, None)
 """
@@ -497,6 +502,142 @@ class TestAffinePoint(unittest.TestCase):
 
         # p finished cycle through curve
         self.assertEqual(p, ZERO_POINT)
+
+
+class ProjectivePoint:
+    x: Coordinate
+    y: Coordinate
+    z: Coordinate
+
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def is_zero(self) -> bool:
+        return self.z.value == 0
+
+    def is_on_curve(self) -> bool:
+        return self.z * self.y ** 2 == self.x ** 3 + PARAMETER_A * self.z ** 2 * self.x + PARAMETER_B * self.z ** 3
+
+    def xy(self) -> Optional[Tuple[Coordinate, Coordinate]]:
+        if self.z.value == 0:
+            return None
+        affine_x = self.x / self.z
+        affine_y = self.y / self.z
+        return affine_x, affine_y
+
+    def __eq__(self, other: "ProjectivePoint") -> bool:
+        if self.is_zero() or other.is_zero():
+            return self.is_zero() and other.is_zero()
+        return self.x * other.z == other.x * self.z and self.y * other.z == other.y * self.z
+
+    def __repr__(self) -> str:
+        return "({} : {} : {})".format(self.x, self.y, self.z)
+
+    def double(self) -> "ProjectivePoint":
+        t = Coordinate(3) * self.x * self.x + PARAMETER_A * self.z * self.z
+        u = Coordinate(2) * self.y * self.z
+        v = Coordinate(2) * u * self.x * self.y
+        w = t * t - Coordinate(2) * v
+
+        x = u * w
+        y = t * (v - w) - Coordinate(2) * u * self.y * u * self.y
+        z = u * u * u
+
+        return ProjectivePoint(x, y, z)
+
+    def negation(self) -> "ProjectivePoint":
+        return ProjectivePoint(self.x, -self.y, self.z)
+
+    def __add__(self, other: "ProjectivePoint") -> "ProjectivePoint":
+        if self.is_zero():
+            return other
+        if other.is_zero():
+            return self
+
+        u0 = self.x * other.z
+        u1 = other.x * self.z
+        t0 = self.y * other.z
+        t1 = other.y * self.z
+
+        if u0 == u1:
+            if t0 == t1:
+                return self.double()
+            else:
+                return ZERO_PROJ_POINT
+
+        u = u0 - u1
+        u2 = u * u
+        u3 = u2 * u
+        t = t0 - t1
+        v = self.z * other.z
+        w = t * t * v - u2 * (u0 + u1)
+
+        x = u * w
+        y = t * (u0 * u2 - w) - t0 * u3
+        z = u3 * v
+
+        return ProjectivePoint(x, y, z)
+
+
+ZERO_PROJ_POINT = ProjectivePoint(Coordinate(0), Coordinate(1), Coordinate(0))
+
+
+class TestProjectivePoint(unittest.TestCase):
+    def test_double(self):
+        points = RandomPoints()
+        one = points.next().into_projective()
+        p = ZERO_PROJ_POINT
+
+        for _ in range(0, NUMBER_POINTS):
+            # print(p)
+            self.assertTrue(p.is_on_curve())
+            two_p = p.double()
+            self.assertTrue(two_p.is_on_curve())
+            self.assertEqual(two_p, p + p)
+
+            if two_p.is_zero():
+                self.assertEqual(two_p, ZERO_PROJ_POINT)
+            if two_p == two_p.negation():
+                self.assertEqual(two_p, ZERO_PROJ_POINT)
+
+            p += one
+
+        # p finished cycle through curve
+        self.assertEqual(p, ZERO_PROJ_POINT)
+
+    # XXX: Expensive test
+    def test_add(self):
+        points = RandomPoints()
+        one = points.next().into_projective()
+        p = ZERO_PROJ_POINT
+
+        for _ in range(0, NUMBER_POINTS):
+            self.assertTrue(p.is_on_curve())
+            q = ZERO_PROJ_POINT
+
+            for _ in range(0, NUMBER_POINTS):
+                self.assertTrue(q.is_on_curve())
+                p_plus_q = p + q
+                self.assertTrue(p_plus_q.is_on_curve())
+
+                if p.is_zero():
+                    self.assertEqual(p_plus_q, q)
+                if q.is_zero():
+                    self.assertEqual(p_plus_q, p)
+                if p == q.negation():
+                    self.assertEqual(p_plus_q, ZERO_PROJ_POINT)
+
+                q += one
+
+            # q finished cycle through curve
+            self.assertEqual(q, ZERO_PROJ_POINT)
+
+            p += one
+
+        # p finished cycle through curve
+        self.assertEqual(p, ZERO_PROJ_POINT)
 
 
 def int_from_bytes(b: bytes) -> int:
