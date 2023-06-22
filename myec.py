@@ -400,8 +400,6 @@ Total number of points on the curve
 
 class TestAffinePoint(unittest.TestCase):
     def test_double(self):
-        points = RandomPoints()
-        one = points.next()
         p = ZERO_POINT
 
         for _ in range(0, NUMBER_POINTS):
@@ -415,15 +413,13 @@ class TestAffinePoint(unittest.TestCase):
             if two_p == two_p.negation():
                 self.assertEqual(two_p, ZERO_POINT)
 
-            p += one
+            p += ONE_POINT
 
         # p finished cycle through curve
         self.assertEqual(p, ZERO_POINT)
 
     # XXX: Expensive test
     def test_add(self):
-        points = RandomPoints()
-        one = points.next()
         p = ZERO_POINT
 
         for _ in range(0, NUMBER_POINTS):
@@ -442,12 +438,12 @@ class TestAffinePoint(unittest.TestCase):
                 if p == q.negation():
                     self.assertEqual(p_plus_q, ZERO_POINT)
 
-                q += one
+                q += ONE_POINT
 
             # q finished cycle through curve
             self.assertEqual(q, ZERO_POINT)
 
-            p += one
+            p += ONE_POINT
 
         # p finished cycle through curve
         self.assertEqual(p, ZERO_POINT)
@@ -586,8 +582,6 @@ ZERO_PROJ_POINT = ProjectivePoint(Coordinate(0), Coordinate(1), Coordinate(0))
 
 class TestProjectivePoint(unittest.TestCase):
     def test_double(self):
-        points = RandomPoints()
-        one = points.next().into_projective()
         p = ZERO_PROJ_POINT
 
         for _ in range(0, NUMBER_POINTS):
@@ -602,15 +596,13 @@ class TestProjectivePoint(unittest.TestCase):
             if two_p == two_p.negation():
                 self.assertEqual(two_p, ZERO_PROJ_POINT)
 
-            p += one
+            p += ONE_PROJ_POINT
 
         # p finished cycle through curve
         self.assertEqual(p, ZERO_PROJ_POINT)
 
     # XXX: Expensive test
     def test_add(self):
-        points = RandomPoints()
-        one = points.next().into_projective()
         p = ZERO_PROJ_POINT
 
         for _ in range(0, NUMBER_POINTS):
@@ -629,12 +621,12 @@ class TestProjectivePoint(unittest.TestCase):
                 if p == q.negation():
                     self.assertEqual(p_plus_q, ZERO_PROJ_POINT)
 
-                q += one
+                q += ONE_PROJ_POINT
 
             # q finished cycle through curve
             self.assertEqual(q, ZERO_PROJ_POINT)
 
-            p += one
+            p += ONE_PROJ_POINT
 
         # p finished cycle through curve
         self.assertEqual(p, ZERO_PROJ_POINT)
@@ -764,7 +756,11 @@ Global sequence of random non-zero curve points.
 """
 ONE_POINT = GLOBAL_POINTS.next()
 """
-Global one point.
+Global one point (affine).
+"""
+ONE_PROJ_POINT = ONE_POINT.into_projective()
+"""
+Global one point (projective).
 """
 
 
