@@ -4,7 +4,7 @@ import math
 import hashlib
 import unittest
 
-MAX_COORDINATE = 1009
+MAX_COORDINATE = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F
 MINUS_ONE_COORDINATE = MAX_COORDINATE - 1
 
 
@@ -160,7 +160,7 @@ class Coordinate(ModInt):
 
 
 PARAMETER_A = Coordinate(0)
-PARAMETER_B = Coordinate(11)
+PARAMETER_B = Coordinate(7)
 
 
 class TestCoordinate(unittest.TestCase):
@@ -392,7 +392,7 @@ ZERO_POINT = AffinePoint(None, None)
 Zero point
 """
 # ONE_POINT = None
-NUMBER_POINTS = 967
+NUMBER_POINTS = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
 """
 Total number of points on the curve
 """
@@ -754,7 +754,7 @@ GLOBAL_POINTS = RandomPoints()
 """
 Global sequence of random non-zero curve points.
 """
-ONE_POINT = GLOBAL_POINTS.next()
+ONE_POINT = AffinePoint(Coordinate(0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798), Coordinate(0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8))
 """
 Global one point (affine).
 """
