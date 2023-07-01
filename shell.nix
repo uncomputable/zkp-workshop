@@ -4,7 +4,8 @@ let
     matplotlib
     numpy
     notebook
-    ipympl
+    networkx
+    ipywidgets
   ];
   my-python = pkgs.python3.withPackages my-python-packages;
 in
