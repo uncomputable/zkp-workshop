@@ -202,6 +202,9 @@ class AffinePoint:
         self.x = x
         self.y = y
 
+    def __repr__(self) -> str:
+        return repr(self.xy())
+
     def is_zero(self) -> bool:
         """
         Return whether self is the zero point.
