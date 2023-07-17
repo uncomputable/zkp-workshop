@@ -659,6 +659,60 @@ def random_scalar() -> Scalar:
     return Scalar(n)
 
 
+class Opening:
+    """
+    Opening of a cryptographic commitment to a value.
+    """
+    v: Scalar
+    """
+    Contained value
+    """
+    r: Scalar
+    """
+    Blinding factor
+    """
+    g: AffinePoint
+    """
+    Generator for value
+    """
+    h: AffinePoint
+    """
+    Generator for blinding factor
+
+    **Both generators must be independent from each other!**
+    """
+
+    def __init__(self, v: Scalar, g: AffinePoint, h: AffinePoint):
+        self.v = v
+        self.g = g
+        self.r = random_scalar()
+        self.h = h
+
+    def __repr__(self) -> str:
+        return "{}: {}".format(self.value(), self.close())
+
+    def value(self) -> Scalar:
+        return self.v
+
+    def close(self) -> AffinePoint:
+        """
+        Return the commitment that corresponds to the opening.
+        """
+        return self.r * self.h + self.v * self.g
+
+    def verify(self, commitment: AffinePoint) -> bool:
+        """
+        Return whether the given commitment corresponds to this opening.
+        """
+        return commitment == self.close()
+
+    def serialize(self) -> Tuple[Scalar, Scalar]:
+        """
+        Serialize the opening as it would be broadcast in an interactive proof.
+        """
+        return self.v, self.r
+
+
 def miller_rabin(n: int, k: int) -> bool:
     """
     Return whether n is probably prime after k rounds.
