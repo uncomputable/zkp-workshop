@@ -63,6 +63,9 @@ class ModInt:
     def __int__(self) -> int:
         return self.value
 
+    def __hash__(self) -> hash:
+        return hash(self.value)
+
     def legendre_symbol(self) -> int:
         """
         Return the Legendre symbol. Also known as Euler's criterion.
@@ -204,6 +207,9 @@ class AffinePoint:
 
     def __repr__(self) -> str:
         return repr(self.xy())
+
+    def __hash__(self) -> hash:
+        return hash((self.x, self.y))
 
     def is_zero(self) -> bool:
         """
