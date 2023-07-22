@@ -264,7 +264,7 @@ class AffinePoint:
 
         return AffinePoint(x, y)
 
-    def negation(self) -> "AffinePoint":
+    def __neg__(self) -> "AffinePoint":
         """
         Return -self (point negation).
 
@@ -306,7 +306,7 @@ class AffinePoint:
 
         self - other is the same as self + (-other).
         """
-        return self + other.negation()
+        return self + -other
 
     def __rmul__(self, scalar: "Scalar") -> Optional["AffinePoint"]:
         """
@@ -416,7 +416,7 @@ class TestAffinePoint(unittest.TestCase):
 
             if two_p.is_zero():
                 self.assertEqual(two_p, ZERO_POINT)
-            if two_p == two_p.negation():
+            if two_p == -two_p:
                 self.assertEqual(two_p, ZERO_POINT)
 
             p += one
@@ -443,7 +443,7 @@ class TestAffinePoint(unittest.TestCase):
                     self.assertEqual(p_plus_q, q)
                 if q.is_zero():
                     self.assertEqual(p_plus_q, p)
-                if p == q.negation():
+                if p == -q:
                     self.assertEqual(p_plus_q, ZERO_POINT)
 
                 q += one
@@ -461,7 +461,7 @@ class TestAffinePoint(unittest.TestCase):
 
         for _ in range(0, NUMBER_POINTS):
             self.assertTrue(p.is_on_curve())
-            minus_p = p.negation()
+            minus_p = -p
             self.assertTrue(minus_p.is_on_curve())
             self.assertEqual(p + minus_p, ZERO_POINT)
 
@@ -531,7 +531,7 @@ def number_points() -> Optional[int]:
     if ONE_POINT is None:
         return None
 
-    minus_one_point = ONE_POINT.negation()
+    minus_one_point = -ONE_POINT
     k = minus_one_point.discrete_log()
     assert k * ONE_POINT == minus_one_point
     assert ONE_POINT + minus_one_point == ZERO_POINT
