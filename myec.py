@@ -4,7 +4,7 @@ import math
 import hashlib
 import unittest
 
-MAX_COORDINATE = 1009
+MAX_COORDINATE = 7
 MINUS_ONE_COORDINATE = MAX_COORDINATE - 1
 
 
@@ -163,7 +163,7 @@ class Coordinate(ModInt):
 
 
 PARAMETER_A = Coordinate(0)
-PARAMETER_B = Coordinate(11)
+PARAMETER_B = Coordinate(3)
 
 
 class TestCoordinate(unittest.TestCase):
@@ -396,7 +396,7 @@ ZERO_POINT = AffinePoint(None, None)
 Zero point
 """
 # ONE_POINT = None
-NUMBER_POINTS = 967
+NUMBER_POINTS = 13
 """
 Total number of points on the curve
 """
