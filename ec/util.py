@@ -2,8 +2,12 @@ from typing import Tuple
 import unittest
 
 # Use this in conjunction with ec.core
-from ec.core import Scalar, AffinePoint, ONE_POINT, random_scalar, random_point
-Point = AffinePoint
+# from ec.core import Scalar, AffinePoint, ONE_POINT, random_scalar, random_point
+# Point = AffinePoint
+
+# Use this in conjunction with ec.static
+from ec.static import Scalar, CurvePoint, ONE_POINT, random_scalar, random_point
+Point = CurvePoint
 
 
 class Opening:
