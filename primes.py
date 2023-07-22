@@ -1,4 +1,4 @@
-from myec import MAX_COORDINATE, NUMBER_POINTS
+from ec.core import MAX_COORDINATE, NUMBER_POINTS
 import random
 import math
 import unittest

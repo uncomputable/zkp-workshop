@@ -1,9 +1,8 @@
-import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider, Button
 #%matplotlib ipympl
 
-from myec import *
+from ec.core import MAX_COORDINATE, NUMBER_POINTS, ONE_POINT, Scalar
 
 # Customization
 marker_color='#283F4E' 
