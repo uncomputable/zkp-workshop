@@ -73,16 +73,16 @@ def chi_square_equal(this: List, other: List) -> bool:
     # The argument is analogous for the other cells.
     expected_counts = (this_counts + other_counts) / 2
 
-    # Compute the X^2 value of each distribution = how much it diverges from the expected count
+    # Compute the χ² value of each distribution = how much it diverges from the expected count
     this_chi_square = np.sum((this_counts - expected_counts) ** 2 / expected_counts)
     other_chi_square = np.sum((other_counts - expected_counts) ** 2 / expected_counts)
-    # Sum all X^2 values
+    # Sum all χ² values
     observed_chi_square = this_chi_square + other_chi_square
-    print("X^2 = {:0.2f}".format(observed_chi_square))
+    print("χ² = {:0.2f}".format(observed_chi_square))
 
     degrees_freedom = len(bins) - 1
     print("Degrees of freedom = {}".format(degrees_freedom))
     critical_chi_square = CRITICAL_CHI_SQUARE_VALUES[degrees_freedom - 1]
-    print("Critical X^2 = {:0.2f}".format(critical_chi_square))
+    print("Critical χ² = {:0.2f}".format(critical_chi_square))
 
     return critical_chi_square >= observed_chi_square
