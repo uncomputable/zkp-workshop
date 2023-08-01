@@ -17,11 +17,15 @@ def chi_square_equal(this: List, other: List) -> bool:
     """
     Perform a chi-square test to check if two distributions are equal.
 
-    The Chi-square test checks if two random variables are statistically independent.
+    The Chi-square test checks if two probability distributions are the same.
     This is called the null hypothesis.
-    The random variables are the distributions that the samples come from.
-    Independence means that the probability of seeing any particular value
-    is equal the probability of seeing this value given a particular distribution.
+
+    If this method returns false, then the null hypothesis is **definitely** false.
+
+    If this method returns true, then we didn't find statistically significant evidence to reject the null hypothesis.
+    That means the null hypothesis **might be** false!
+    If our test is accurate, then it is **likely** that the null hypothesis is correct.
+    No statistical test can ever definitely confirm the null hypothesis!
 
     The significance level is implicitly set by the list of critical chi-square values.
 
@@ -29,6 +33,14 @@ def chi_square_equal(this: List, other: List) -> bool:
     :param other: list of samples from other distribution
     :return: whether both distributions are equal
     """
+    # Construct a contingency table:
+    #
+    # The rows are the source of the sample: original distribution (this) and fake distribution (other).
+    #
+    # The columns are the variant of the sample data: same-looking samples count towards the same column.
+    # Columns are also called bins.
+    #
+    # Each cell counts the number of samples.
     this_counter = Counter(this)
     other_counter = Counter(other)
     bins = set(this_counter.keys()).union(set(other_counter.keys()))
@@ -36,6 +48,7 @@ def chi_square_equal(this: List, other: List) -> bool:
     this_counts = np.array([this_counter[b] if b in this_counter else 0 for b in bins])
     other_counts = np.array([other_counter[b] if b in other_counter else 0 for b in bins])
 
+    # Chi-square doesn't work well for (almost) empty bins
     bad_bins = 0
     for i in range(len(bins)):
         if this_counts[i] < 5 or other_counts[i] < 5:
@@ -43,8 +56,21 @@ def chi_square_equal(this: List, other: List) -> bool:
     bad_rate = bad_bins / len(bins) * 100
     print("{} out of {} bins were almost empty ({:0.2f}%)".format(bad_bins, len(bins), bad_rate))
 
-    # Compute the Arithmetic mean of each bin
-    # FIXME: column sum * row sum / total sum???
+    # Compute the expected counts:
+    #
+    # Let's label the rows O (original) and F (fake), and the columns 1, 2, 3, ... .
+    #
+    # Cell O, 1 should have total_count * P(O ∩ 1) as its count.
+    # Under the null hypothesis, the events O and 1 are independent.
+    # We can write P(O ∩ 1) = P(O) * P(1) = row_O_count / total_count * column_1_count / total_count.
+    #
+    # Because both distributions have the same number of samples,
+    # row_O_count / total_count = row_F_count / total_count = 0.5.
+    #
+    # Simplifying all of that, we expect column_1_count / 2 in the cell.
+    # This is equal to the arithmetic mean of column 1.
+    #
+    # The argument is analogous for the other cells.
     expected_counts = (this_counts + other_counts) / 2
 
     # Compute the X^2 value of each distribution = how much it diverges from the expected count
