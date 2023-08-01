@@ -1,16 +1,21 @@
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.widgets import Slider, Button
-from ec.core import MAX_COORDINATE, NUMBER_POINTS, ONE_POINT, Scalar
+from ec.core import MAX_COORDINATE, NUMBER_POINTS, PARAMETER_A, PARAMETER_B, ONE_POINT, Scalar
 
 # Initialize plot
-fig, ax = plt.subplots(subplot_kw = dict(aspect="equal"))
-ax.set_xlim(0, MAX_COORDINATE)
-ax.set_ylim(0, MAX_COORDINATE)
+fig, ax = plt.subplots()
+ax.set_title("Elliptic curve $y^2 \equiv x^3 + {}x + {}$ (mod {})".format(PARAMETER_A.value, PARAMETER_B.value, MAX_COORDINATE))
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 
-init_x, init_y = ONE_POINT.xy()
-scat = ax.scatter([init_x.value], [init_y.value])
+# Initialize an array of zeros (white squares)
+points = np.zeros((MAX_COORDINATE, MAX_COORDINATE))
+
+# Draw first point
+x, y = ONE_POINT.xy()
+points[y.value, x.value] = 1
+im = ax.imshow(points, cmap='gray_r', origin='lower', animated=True)
 
 # Iteration slider
 ax_slider = fig.add_axes([0.1, 0.1, 0.05, 0.75])  # [left, bottom, width, height]
@@ -24,12 +29,19 @@ slider = Slider(
     orientation="vertical"
 )
 
-def update(n):
+def update(n: int):
+    global x, y
+
+    # Reset previous point
+    points[y.value, x.value] = 0
+
     if n > 0:
+        # Set next point
         x, y = (Scalar(n) * ONE_POINT).xy()
-        scat.set_offsets([[x.value, y.value]])
-    else:
-        scat.set_offsets([[100,100]])
+        points[y.value, x.value] = 1
+
+    # Redraw
+    im.set_array(points)
 
 slider.on_changed(update)
 
