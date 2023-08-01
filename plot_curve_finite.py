@@ -5,6 +5,9 @@ from ec.core import MAX_COORDINATE, PARAMETER_A, PARAMETER_B
 
 # Initialize the plot
 fig, ax = plt.subplots()
+ax.set_title("Elliptic curve $y^2 \equiv x^3 + {}x + {}$ (mod {})".format(PARAMETER_A.value, PARAMETER_B.value, MAX_COORDINATE))
+ax.set_xlabel("x")
+ax.set_ylabel("y")
 
 # Initialize an array of zeros (white squares)
 points = np.zeros((MAX_COORDINATE, MAX_COORDINATE))
@@ -23,5 +26,5 @@ for (dlog, xy) in enumerate(XY):
 # because imshow places it at the top left by default
 ax.imshow(points, cmap='gray_r', origin='lower')
 
-ax.set_title("Elliptic curve $y^2 \equiv x^3 + {}x + {}$ (mod {})".format(PARAMETER_A.value, PARAMETER_B.value, MAX_COORDINATE))
+# Show plot
 plt.show()
