@@ -36,4 +36,4 @@ From 0 to 1.
 """
 
 chi_squared_values = [chi2.ppf(1 - significance, df) for df in degrees_freedom]
-print("({})".format(", ".join(["{:0.2f}".format(x) for x in chi_squared_values])))
+print("CRITICAL_CHI_SQUARE_VALUES = ({})".format(", ".join(["{:0.2f}".format(x) for x in chi_squared_values])))
