@@ -2,7 +2,7 @@
 Use this script to generate the constants in ec.static.py.
 """
 
-from core import ONE_POINT, ZERO_POINT
+from ec.core import ONE_POINT, ZERO_POINT
 from typing import List, Optional, Tuple
 
 IntPoint = Optional[Tuple[int, int]]
