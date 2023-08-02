@@ -4,6 +4,8 @@ Use this script to generate the constants in ec.static.py.
 
 from ec.core import ONE_POINT, ZERO_POINT
 from typing import List, Optional, Tuple
+import meta
+import os
 
 IntPoint = Optional[Tuple[int, int]]
 
@@ -25,5 +27,5 @@ def point_xy() -> List[IntPoint]:
     return xy
 
 
-xy = ", ".join(["{}".format(xy) for xy in point_xy()])
-print("XY = ({})".format(xy))
+xy = "({})".format(", ".join(["{}".format(xy) for xy in point_xy()]))
+meta.update_variable(os.path.join("ec", "static.py"), lambda x: f"XY = {x}", xy)
