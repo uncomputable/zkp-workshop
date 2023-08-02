@@ -15,28 +15,38 @@ This script keeps a = 0. This simplifies our equations and
 enables an optimized implementation of EC operations.
 secp256k1 uses the same trick.
 
+Feel free to edit the initial field modulus.
+The script try successively greater prime numbers.
+
 You need sage(math) to run this script!
 """
+from typing import Tuple
 
-p = 1  # First field modulus candidate (feel free to edit)
-found_curves = 0  # Leave this at zero
+p = 1
+"""
+First field modulus candidate.
 
-for _ in range(0, 10000):
-    p = next_prime(p)
-    F = FiniteField(p)
-    a = 0
+From 1 to any integer.
+"""
 
-    for b in range(1, 20):
-        try:
-            C = EllipticCurve([F(a), F(b)])
-        except ArithmeticError:
-            continue
-        n = C.order()
+def find_curve(p: int) -> Tuple[int, int, int, int]:
+    for _ in range(0, 10000):
+        p = next_prime(p)
+        F = FiniteField(p)
+        a = 0
 
-        if n.is_prime():
-            print("p = {}, a = {}, b = {}, n = {}".format(p, a, b, n))
-            found_curves += 1
-            break
+        for b in range(1, 20):
+            try:
+                C = EllipticCurve([F(a), F(b)])
+            except ArithmeticError:
+                continue
+            n = C.order()
 
-    if found_curves >= 10:
-        break
+            if n.is_prime():
+                return p, a, b, n
+
+    raise StopIteration
+
+
+p, a, b, n = find_curve(p)
+print(f"p = {p}, a = {a}, b = {b}, n = {n}")
