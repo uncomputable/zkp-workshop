@@ -2,7 +2,7 @@
 Use this script to generate the constants in ec.static.py.
 """
 
-from ec.core import ONE_POINT, ZERO_POINT
+from ec.core import ONE_POINT, ZERO_POINT, NUMBER_POINTS
 from typing import List, Optional, Tuple
 import meta
 import os
@@ -28,4 +28,11 @@ def point_xy() -> List[IntPoint]:
 
 
 xy = "({})".format(", ".join(["{}".format(xy) for xy in point_xy()]))
-meta.update_variable(os.path.join("ec", "static.py"), lambda x: f"XY = {x}", xy)
+
+patterns = (
+    lambda x: f"NUMBER_POINTS = {x}",
+    lambda x: f"XY = {x}",
+)
+updated_values = (NUMBER_POINTS, xy)
+
+meta.update_variables(os.path.join("ec", "static.py"), patterns, updated_values)
