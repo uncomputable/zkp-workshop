@@ -21,6 +21,8 @@ The script try successively greater prime numbers.
 You need sage(math) to run this script!
 """
 from typing import Tuple
+import meta
+import os
 
 p = 1
 """
@@ -49,4 +51,12 @@ def find_curve(p: int) -> Tuple[int, int, int, int]:
 
 
 p, a, b, n = find_curve(p)
-print(f"p = {p}, a = {a}, b = {b}, n = {n}")
+patterns = (
+    lambda x: f"MAX_COORDINATE = {x}",
+    lambda x: f"PARAMETER_A = Coordinate({x})",
+    lambda x: f"PARAMETER_B = Coordinate({x})",
+    lambda x: f"NUMBER_POINTS = {x}"
+)
+updated_values = (p, a, b, n)
+
+meta.update_variables(os.path.join("ec", "core.py"), patterns, updated_values)
