@@ -15,21 +15,11 @@ This script keeps a = 0. This simplifies our equations and
 enables an optimized implementation of EC operations.
 secp256k1 uses the same trick.
 
-Feel free to edit the initial field modulus.
-The script try successively greater prime numbers.
-
 You need sage(math) to run this script!
 """
 from typing import Tuple
 import meta
 import os
-
-p = 1
-"""
-First field modulus candidate.
-
-From 1 to any integer.
-"""
 
 def find_curve(p: int) -> Tuple[int, int, int, int]:
     for _ in range(0, 10000):
@@ -50,13 +40,22 @@ def find_curve(p: int) -> Tuple[int, int, int, int]:
     raise StopIteration
 
 
-p, a, b, n = find_curve(p)
-patterns = (
-    lambda x: f"MAX_COORDINATE = {x}",
-    lambda x: f"PARAMETER_A = Coordinate({x})",
-    lambda x: f"PARAMETER_B = Coordinate({x})",
-    lambda x: f"NUMBER_POINTS = {x}"
-)
-updated_values = (p, a, b, n)
+p = input("Initial field modulus (positive integer): ")
 
-meta.update_variables(os.path.join("ec", "core.py"), patterns, updated_values)
+try:
+    p = int(p)
+    p, a, b, n = find_curve(p)
+
+    patterns = (
+        lambda x: f"MAX_COORDINATE = {x}",
+        lambda x: f"PARAMETER_A = Coordinate({x})",
+        lambda x: f"PARAMETER_B = Coordinate({x})",
+        lambda x: f"NUMBER_POINTS = {x}"
+    )
+    updated_values = (p, a, b, n)
+
+    meta.update_variables(os.path.join("ec", "core.py"), patterns, updated_values)
+except ValueError:
+    print("Field modulus must be an integer")
+except StopIteration:
+    print("Could not find any curves within the given search space")
