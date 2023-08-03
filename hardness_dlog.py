@@ -1,11 +1,16 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.widgets import Slider, Button
-from ec.core import MAX_COORDINATE, NUMBER_POINTS, PARAMETER_A, PARAMETER_B, ONE_POINT, Scalar
+
+MAX_COORDINATE = 7
+PARAMETER_A = 0
+PARAMETER_B = 3
+NUMBER_POINTS = 13
+XY = (None, (4, 2), (3, 3), (1, 2), (2, 5), (5, 3), (6, 3), (6, 4), (5, 4), (2, 2), (1, 5), (3, 4), (4, 5))
 
 # Initialize plot
 fig, ax = plt.subplots()
-ax.set_title("Elliptic curve $y^2 \equiv x^3 + {}x + {}$ (mod {})".format(PARAMETER_A.value, PARAMETER_B.value, MAX_COORDINATE))
+ax.set_title("Elliptic curve $y^2 \equiv x^3 + {}x + {}$ (mod {})".format(PARAMETER_A, PARAMETER_B, MAX_COORDINATE))
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 
@@ -13,8 +18,8 @@ ax.set_ylabel("y")
 points = np.zeros((MAX_COORDINATE, MAX_COORDINATE))
 
 # Draw first point
-x, y = ONE_POINT.xy()
-points[y.value, x.value] = 1
+x, y = XY[1]
+points[y, x] = 1
 im = ax.imshow(points, cmap='gray_r', origin='lower', animated=True)
 
 # Iteration slider
@@ -33,12 +38,12 @@ def update(n: int):
     global x, y
 
     # Reset previous point
-    points[y.value, x.value] = 0
+    points[y, x] = 0
 
     if n > 0:
         # Set next point
-        x, y = (Scalar(n) * ONE_POINT).xy()
-        points[y.value, x.value] = 1
+        x, y = XY[n]
+        points[y, x] = 1
 
     # Redraw
     im.set_array(points)
