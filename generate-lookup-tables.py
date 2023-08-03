@@ -1,8 +1,8 @@
 """
-Use this script to generate the constants in ec.static.py.
+Use this script to generate the constants in ec.static.py and hardness_dlog.py.
 """
 
-from ec.core import ONE_POINT, ZERO_POINT, NUMBER_POINTS
+from ec.core import ONE_POINT, ZERO_POINT, NUMBER_POINTS, MAX_COORDINATE, PARAMETER_A, PARAMETER_B
 from typing import List, Optional, Tuple
 import meta
 import os
@@ -36,3 +36,14 @@ patterns = (
 updated_values = (NUMBER_POINTS, xy)
 
 meta.update_variables(os.path.join("ec", "static.py"), patterns, updated_values)
+
+patterns = (
+    lambda x: f"MAX_COORDINATE = {x}",
+    lambda x: f"PARAMETER_A = {x}",
+    lambda x: f"PARAMETER_B = {x}",
+    lambda x: f"NUMBER_POINTS = {x}",
+    lambda x: f"XY = {x}",
+)
+updated_values = (MAX_COORDINATE, PARAMETER_A.value, PARAMETER_B.value, NUMBER_POINTS, xy)
+
+meta.update_variables("hardness_dlog.py", patterns, updated_values)
