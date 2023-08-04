@@ -6,7 +6,7 @@ import unittest
 # Point = AffinePoint
 
 # Use this in conjunction with ec.static
-from ec.static import Scalar, CurvePoint, ONE_POINT, random_scalar, random_point
+from local.ec.static import Scalar, CurvePoint, ONE_POINT, random_scalar, random_point
 Point = CurvePoint
 
 

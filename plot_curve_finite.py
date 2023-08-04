@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from ec.static import XY
-from ec.core import MAX_COORDINATE, PARAMETER_A, PARAMETER_B
+from local.ec.static import XY
+from local.ec.core import MAX_COORDINATE, PARAMETER_A, PARAMETER_B
 
 # Initialize the plot
 fig, ax = plt.subplots()

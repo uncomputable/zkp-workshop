@@ -11,6 +11,7 @@ You need scipy to run this script!
 
 from scipy.stats import chi2
 import meta
+import os
 
 degrees_freedom = range(1, 10000)
 """
@@ -38,4 +39,8 @@ From 0 to 1.
 
 chi_squared_values = [chi2.ppf(1 - significance, df) for df in degrees_freedom]
 chi_squared_fmt = "({})".format(", ".join(["{:0.2f}".format(x) for x in chi_squared_values]))
-meta.update_variable("stats.py", lambda x: f"CRITICAL_CHI_SQUARE_VALUES = {x}", chi_squared_fmt)
+
+pattern = lambda x: f"CRITICAL_CHI_SQUARE_VALUES = {x}"
+updated_value = chi_squared_fmt
+
+meta.update_variable(os.path.join("local", "stats.py"), pattern, updated_value)

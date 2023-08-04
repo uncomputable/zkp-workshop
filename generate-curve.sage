@@ -54,7 +54,7 @@ try:
     )
     updated_values = (p, a, b, n)
 
-    meta.update_variables(os.path.join("ec", "core.py"), patterns, updated_values)
+    meta.update_variables(os.path.join("local", "ec", "core.py"), patterns, updated_values)
 except ValueError:
     print("Field modulus must be an integer")
 except StopIteration:

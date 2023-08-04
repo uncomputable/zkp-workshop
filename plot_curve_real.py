@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ec.core import PARAMETER_A, PARAMETER_B
+from local.ec.core import PARAMETER_A, PARAMETER_B
 
 # Generate x values
 x = np.linspace(-2, 2, 400)
