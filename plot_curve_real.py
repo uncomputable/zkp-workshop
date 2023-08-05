@@ -2,20 +2,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 from local.ec.core import PARAMETER_A, PARAMETER_B
 
-# Generate x values
-x = np.linspace(-2, 2, 400)
 
-# Calculate y values (note: this will include complex numbers)
-y_squared = x**3 + PARAMETER_A.value * x + PARAMETER_B.value
+def plot():
+    # Initialize the plot
+    fig, ax = plt.subplots()
+    ax.set_title(f"Elliptic curve $y^2 = x^3 + {PARAMETER_A.value}x + {PARAMETER_B.value}$ over ℝ")
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    plt.grid(True)
 
-# We'll take the real square roots as y values, and ignore the complex roots
-y_positive = np.real(np.sqrt(y_squared))
-y_negative = -np.real(np.sqrt(y_squared))
+    # Compute points on the curve
+    x = np.linspace(-5, 5, 100)
+    y = np.linspace(-5, 5, 100)
+    x, y = np.meshgrid(x, y)
+    z = pow(y, 2) - pow(x, 3) - x * PARAMETER_A.value - PARAMETER_B.value
 
-# Plot the curve
-plt.plot(x, y_positive, "b")
-plt.plot(x, y_negative, "b")
+    # Plot the curve
+    plt.contour(x, y, z, [0])
 
-plt.title("Elliptic curve $y^2 = x^3 + {}x + {}$ over ℝ".format(PARAMETER_A.value, PARAMETER_B.value))
-plt.grid(True)
-plt.show()
+    # Show plot
+    plt.show()
+
+
+if __name__ == "__main__":
+    plot()
