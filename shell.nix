@@ -9,6 +9,7 @@ let
     notebook
     networkx
     ipywidgets
+    pygame
   ] ++ optional withScipy scipy;
   my-python = pkgs.python3.withPackages my-python-packages;
 in

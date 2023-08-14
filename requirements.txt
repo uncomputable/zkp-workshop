@@ -3,3 +3,4 @@ numpy
 notebook
 networkx
 ipywidgets
+pygame
