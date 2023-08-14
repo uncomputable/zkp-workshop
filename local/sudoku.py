@@ -35,6 +35,9 @@ class Board:
     def __repr__(self) -> str:
         return repr(self.rows)
 
+    def __getitem__(self, row: int):
+        return self.rows[row]
+
     @classmethod
     def blank(cls, dim: int) -> "Board":
         """
