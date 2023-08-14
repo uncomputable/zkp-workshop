@@ -48,7 +48,7 @@ class Matrix(Generic[Row, Col]):
     def __repr__(self) -> str:
         return repr(self.rows)
 
-    def __eq__(self, other: "Matrix"):
+    def __eq__(self, other: "Matrix") -> bool:
         return self.rows == other.rows and self.cols == other.cols
 
     def is_empty(self) -> bool:

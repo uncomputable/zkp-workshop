@@ -1,6 +1,6 @@
 import random
 import networkx as nx
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, TypeVar, Generic, Iterator
 
 
 def random_graph(n: int, e: int) -> nx.Graph:
@@ -58,31 +58,51 @@ def not_three_colorable_graph(n: int) -> Tuple[nx.Graph, Dict[int, int]]:
     return graph, coloring
 
 
-class Mapping:
-    """
-    Mapping of values: Values are mapped onto other values.
-    """
+A = TypeVar("A")
+B = TypeVar("B")
+C = TypeVar("C")
 
-    def __init__(self, inner: Dict):
+
+class Mapping(Generic[A, B]):
+    """
+    Mapping of values:
+
+    Values from the domain A are mapped onto values from the codomain B.
+
+    Each input from A is mapped to exactly one output from B, or A is undefined (function).
+
+    Each output from B is the result of mapping some input A onto it (surjective).
+
+    There might be distinct inputs that map onto the same output (not injective),
+    or each input maps onto a unique output (injective).
+
+    If the mapping is injective, then (because it is always surjective) it is a bijection, aka a one-to-one mapping.
+    """
+    inner: Dict[A, B]
+
+    def __init__(self, inner: Dict[A, B]):
         self.inner = inner
 
     def __repr__(self) -> str:
         return str(self.inner)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Tuple[A, B]]:
         for key, value in self.inner.items():
             yield key, value
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: A) -> B:
         return self.inner[index]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.inner)
 
     @classmethod
-    def shuffle_graph(cls, graph: nx.Graph) -> "Mapping":
+    def shuffle_graph(cls, graph: nx.Graph) -> "Mapping[int, int]":
         """
         Create a mapping of node labels by random shuffling nodes.
+
+        :param graph: original graph
+        :return: random shuffling of node labels
         """
         original = list(graph.nodes())
         shuffled = original.copy()
@@ -92,11 +112,14 @@ class Mapping:
         return Mapping(inner)
 
     @classmethod
-    def shuffle_list(cls, lst: List) -> "Mapping":
+    def shuffle_list(cls, lst: List[A]) -> "Mapping[A, A]":
         """
         Create a mapping by randomly shuffling list elements.
 
         The original list remains unchanged.
+
+        :param lst: original list
+        :return: random shuffling of list elements
         """
         shuffled = lst.copy()
         random.shuffle(shuffled)
@@ -109,14 +132,20 @@ class Mapping:
         Apply the mapping of node labels to a graph.
 
         The original graph remains unchanged and a new graph is crated.
+
+        :param graph: original graph
+        :return: graph with mapped node labels
         """
         return nx.relabel_nodes(graph, self.inner, copy=True)
 
-    def apply_list(self, lst: List) -> List:
+    def apply_list(self, lst: List[A]) -> List[A]:
         """
         Apply the mapping to a list.
 
         The original list remains unchanged and a new list is created.
+
+        :param lst: original list
+        :return: list of mapped values
         """
         return [self.inner[x] for x in lst]
 
@@ -129,12 +158,18 @@ class Mapping:
         inner = {v: k for k, v in self.inner.items()}
         return Mapping(inner)
 
-    def and_then(self, second: "Mapping") -> "Mapping":
+    def and_then(self, second: "Mapping[B, C]") -> "Mapping[A, C]":
         """
         Compose this mapping with a second mapping.
 
-        If A is mapped to B in this mapping and B is mapped to C in the second mapping,
-        then A is mapped to C in their composition.
+        If `a → b` in this mapping and `b → a` in the second mapping,
+        then `a → c` in the composition.
+
+        If `a → b` in this mapping and `b` is undefined for the second mapping,
+        then `a` is undefined in the composition.
+
+        :param second: second mapping
+        :return: composed mapping
         """
         inner = {k: second.inner[self.inner[k]] for k in self.inner}
         return Mapping(inner)
