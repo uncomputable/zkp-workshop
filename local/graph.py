@@ -147,14 +147,31 @@ class Mapping(Generic[A, B]):
         :param lst: original list
         :return: list of mapped values
         """
-        return [self.inner[x] for x in lst]
+        return [self.inner[x] if x in self.inner else x for x in lst]
 
-    def invert(self) -> "Mapping":
+    def is_bijection(self) -> bool:
         """
-        Inverts the mapping.
+        Return whether the mapping is a bijection:
 
-        If A is mapped to B in this mapping, then B is mapped to A in the inverse.
+        Each input from A is mapped to a unique output from B.
+
+        :return: mapping is a bijection
         """
+        return len(self.inner) == len(set(self.inner.values()))
+
+    def invert(self) -> "Mapping[B, A]":
+        """
+        Invert the mapping.
+
+        If `a → b` in this mapping, then `b → a` in the inverse.
+
+        **Only bijections are invertible!**
+
+        :return: inverse mapping
+        """
+        if not self.is_bijection():
+            raise ValueError("Can only invert bijective mappings")
+
         inner = {v: k for k, v in self.inner.items()}
         return Mapping(inner)
 
@@ -171,5 +188,5 @@ class Mapping(Generic[A, B]):
         :param second: second mapping
         :return: composed mapping
         """
-        inner = {k: second.inner[self.inner[k]] for k in self.inner}
+        inner = {k: second.inner[self.inner[k]] for k in self.inner if k in second.inner}
         return Mapping(inner)
