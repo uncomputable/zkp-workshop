@@ -1,6 +1,7 @@
 import math
 import random
 import unittest
+import logging
 from typing import List, Tuple
 from local.exact_cover import Matrix
 
@@ -142,6 +143,7 @@ class Board:
         :return: Sudoku solution
         """
         matrix = self.to_matrix()
+        logging.debug(f"Solving {len(matrix.rows)} elements and {len(matrix.cols)} constraints")
         assignment = next(matrix.algorithm_x([]))
         rows = [row.copy() for row in self.rows]
 
@@ -173,7 +175,7 @@ class Board:
         Create a duplicate value in a random row.
         """
         col = random.choice(range(self.dim_sq))
-        print(f"Falsified row {col}")
+        logging.debug(f"Falsified row {col}")
         row0, row1 = random.sample(range(self.dim_sq), 2)
         assert row0 != row1
         self.rows[col][row0] = self.rows[col][row1]
@@ -183,7 +185,7 @@ class Board:
         Create a duplicate value in a random column.
         """
         row = random.choice(range(self.dim_sq))
-        print(f"Falsified column {row}")
+        logging.debug(f"Falsified column {row}")
         col0, col1 = random.sample(range(self.dim_sq), 2)
         assert col0 != col1
         self.rows[col0][row] = self.rows[col1][row]
@@ -194,7 +196,7 @@ class Board:
         """
         box_col = random.randrange(self.dim) * self.dim
         box_row = random.randrange(self.dim) * self.dim
-        print(f"Falsified box {box_col}:{box_row}")
+        logging.debug(f"Falsified box {box_col}:{box_row}")
         square = [(box_col + col_offset, box_row + row_offset) for col_offset in range(self.dim) for row_offset in range(self.dim)]
 
         cell0, cell1 = random.sample(square, 2)
