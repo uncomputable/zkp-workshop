@@ -62,9 +62,9 @@ class Board:
         rows = [[0 for _ in range(dim_sq)] for _ in range(dim_sq)]
 
         for value in range(1, dim + 1):
-            col = random.randrange(0, dim_sq)
-            row = random.randrange(0, dim_sq)
-            rows[col][row] = value
+            row = random.randrange(dim_sq)
+            col = random.randrange(dim_sq)
+            rows[row][col] = value
 
         return Board(rows)
 
@@ -265,8 +265,8 @@ class Board:
                     )
 
         # Reduce matrix using preset values
-        for col, columns in enumerate(self.rows):
-            for row, value in enumerate(columns):
+        for row, columns in enumerate(self.rows):
+            for col, value in enumerate(columns):
                 if value > 0:
                     matrix.cover_column((row, col, value))
 
@@ -283,9 +283,9 @@ class Board:
         assignment = next(matrix.algorithm_x([]))
         rows = [row.copy() for row in self.rows]
 
-        for row in assignment:
-            x, y, value = row
-            rows[y][x] = value
+        for assigned_row in assignment:
+            row, col, value = assigned_row
+            rows[row][col] = value
 
         return Board(rows)
 
@@ -299,10 +299,10 @@ class Board:
         rows = [row.copy() for row in self.rows]
 
         for _ in range(n_removed):
-            col, row = random.randrange(self.dim_sq), random.randrange(self.dim_sq)
-            while rows[col][row] == 0:
-                col, row = random.randrange(self.dim_sq), random.randrange(self.dim_sq)
-            rows[col][row] = 0
+            row, col = random.randrange(self.dim_sq), random.randrange(self.dim_sq)
+            while rows[row][col] == 0:
+                row, col = random.randrange(self.dim_sq), random.randrange(self.dim_sq)
+            rows[row][col] = 0
 
         return Board(rows)
 
@@ -310,34 +310,34 @@ class Board:
         """
         Create a duplicate value in a random row.
         """
-        col = random.choice(range(self.dim_sq))
-        logging.debug(f"Falsified row {col}")
-        row0, row1 = random.sample(range(self.dim_sq), 2)
-        assert row0 != row1
-        self.rows[col][row0] = self.rows[col][row1]
+        row = random.randrange(self.dim_sq)
+        logging.debug(f"Falsified row {row}")
+        col0, col1 = random.sample(range(self.dim_sq), 2)
+        assert col0 != col1
+        self.rows[row][col0] = self.rows[row][col1]
 
     def falsify_column(self):
         """
         Create a duplicate value in a random column.
         """
-        row = random.choice(range(self.dim_sq))
-        logging.debug(f"Falsified column {row}")
-        col0, col1 = random.sample(range(self.dim_sq), 2)
-        assert col0 != col1
-        self.rows[col0][row] = self.rows[col1][row]
+        col = random.randrange(self.dim_sq)
+        logging.debug(f"Falsified column {col}")
+        row0, row1 = random.sample(range(self.dim_sq), 2)
+        assert row0 != row1
+        self.rows[row0][col] = self.rows[row1][col]
 
     def falsify_box(self):
         """
         Create a duplicate value in a random box.
         """
-        box_col = random.randrange(self.dim) * self.dim
         box_row = random.randrange(self.dim) * self.dim
-        logging.debug(f"Falsified box {box_col}:{box_row}")
-        square = [(box_col + col_offset, box_row + row_offset) for col_offset in range(self.dim) for row_offset in range(self.dim)]
+        box_col = random.randrange(self.dim) * self.dim
+        logging.debug(f"Falsified box {box_row}:{box_col}")
+        box = [(box_row + row_offset, box_col + col_offset) for row_offset in range(self.dim) for col_offset in range(self.dim)]
 
-        cell0, cell1 = random.sample(square, 2)
+        cell0, cell1 = random.sample(box, 2)
         assert cell0 != cell1
-        self.rows[cell0[1]][cell0[0]] = self.rows[cell1[1]][cell1[0]]
+        self.rows[cell0[0]][cell0[1]] = self.rows[cell1[0]][cell1[1]]
 
     def falsify(self, n_errors: int):
         """
