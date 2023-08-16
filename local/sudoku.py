@@ -222,7 +222,7 @@ class Board:
         revealed_board = Board.blank(self.dim)
         for row in range(self.dim_sq):
             for col in range(self.dim_sq):
-                if presets[row][col]:
+                if presets.rows[row][col] > 0:
                     revealed_board.rows[row][col] = self.rows[row][col]
         return revealed_board
 
@@ -237,7 +237,6 @@ class Board:
 
         :return: exact cover instance
         """
-        dim = math.isqrt(self.dim_sq)
         matrix = Matrix()
 
         # Each cell contains exactly one value
@@ -256,12 +255,12 @@ class Board:
                 matrix.add_column("c{}#{}".format(col, value), {(row, col, value) for row in range(self.dim_sq)})
 
         # Each box contains all values
-        for box_row in range(0, self.dim_sq, dim):
-            for box_col in range(0, self.dim_sq, dim):
+        for box_row in range(0, self.dim_sq, self.dim):
+            for box_col in range(0, self.dim_sq, self.dim):
                 for value in range(1, self.dim_sq + 1):
                     matrix.add_column(
                         "b{}:{}#{}".format(box_row, box_col, value),
-                        {(box_row + row_offset, box_col + col_offset, value) for row_offset in range(dim) for col_offset in range(dim)}
+                        {(box_row + row_offset, box_col + col_offset, value) for row_offset in range(self.dim) for col_offset in range(self.dim)}
                     )
 
         # Reduce matrix using preset values
@@ -279,7 +278,7 @@ class Board:
         :return: Sudoku solution
         """
         matrix = self.to_matrix()
-        logging.debug(f"Solving {len(matrix.rows)} elements and {len(matrix.cols)} constraints")
+        logging.info(f"Solving {len(matrix.rows)} elements and {len(matrix.cols)} constraints")
         assignment = next(matrix.algorithm_x([]))
         rows = [row.copy() for row in self.rows]
 
