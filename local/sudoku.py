@@ -288,20 +288,18 @@ class Board:
 
         return Board(rows)
 
-    def remove_values(self, n_removed: int) -> "Board":
+    def remove_values(self, n_remove: int) -> "Board":
         """
         Remove cells from the board.
 
-        :param n_removed: number of cells to be removed
+        :param n_remove: number of cells to be removed
         :return: copy of original board with cells removed
         """
         rows = [row.copy() for row in self.rows]
 
-        for _ in range(n_removed):
-            row, col = random.randrange(self.dim_sq), random.randrange(self.dim_sq)
-            while rows[row][col] == 0:
-                row, col = random.randrange(self.dim_sq), random.randrange(self.dim_sq)
-            rows[row][col] = 0
+        cells = random.sample([(row, col) for row in range(self.dim_sq) for col in range(self.dim_sq)], n_remove)
+        for cell in cells:
+            rows[cell[0]][cell[1]] = 0
 
         return Board(rows)
 
