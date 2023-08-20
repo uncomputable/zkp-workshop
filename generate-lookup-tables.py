@@ -30,10 +30,11 @@ def point_xy() -> List[IntPoint]:
 xy = "({})".format(", ".join(["{}".format(xy) for xy in point_xy()]))
 
 patterns = (
+    lambda x: f"MAX_COORDINATE = {x}",
     lambda x: f"NUMBER_POINTS = {x}",
     lambda x: f"XY = {x}",
 )
-updated_values = (NUMBER_POINTS, xy)
+updated_values = (MAX_COORDINATE, NUMBER_POINTS, xy)
 
 meta.update_variables(os.path.join("local", "ec", "static.py"), patterns, updated_values)
 
