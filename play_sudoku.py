@@ -8,13 +8,13 @@ The inspiration for this game was another interactive Sudoku prover: https://man
 
 import argparse
 import logging
-import math
 import random
 
 import pygame
 import sys
 from typing import Tuple
 from local.sudoku import Board
+from local.graph import Mapping
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -159,16 +159,25 @@ def reveal_partial_solution(row: int, col: int, selection_mode: str):
     :param selection_mode: row, column, box, presents
     """
     global public_solution
-    shuffled_solution = secret_solution.shuffle()
+    secret_mapping = Mapping.shuffle_list(list(range(1, dim_sq + 1)))
+    logging.debug(f"Secret mapping {secret_mapping}")
+    public_solution = Board.blank(dim)
 
     if selection_mode == "row":
-        public_solution = shuffled_solution.reveal_row(row)
+        for col in range(dim_sq):
+            public_solution[row][col] = secret_mapping[secret_solution[row][col]]
     elif selection_mode == "column":
-        public_solution = shuffled_solution.reveal_column(col)
+        for row in range(dim_sq):
+            public_solution[row][col] = secret_mapping[secret_solution[row][col]]
     elif selection_mode == "box":
-        public_solution = shuffled_solution.reveal_box(col, row)
+        for row_offset in range(dim):
+            for col_offset in range(dim):
+                public_solution[row + row_offset][col + col_offset] = secret_mapping[secret_solution[row + row_offset][col + col_offset]]
     elif selection_mode == "presets":
-        public_solution = shuffled_solution.reveal_presets(public_presets)
+        for row in range(dim_sq):
+            for col in range(dim_sq):
+                if public_presets[row][col] > 0:
+                    public_solution[row][col] = secret_mapping[secret_solution[row][col]]
 
 
 def verify_partial_solution(row: int, col: int, selection_mode: str) -> bool:
@@ -181,13 +190,20 @@ def verify_partial_solution(row: int, col: int, selection_mode: str) -> bool:
     :return: partial solution is valid
     """
     if selection_mode == "row":
-        return public_solution.verify_row(row)
+        columns = [public_solution[row][col] for col in range(dim_sq)]
+        logging.info(f"Checking row {columns}")
+        return public_solution.verify_area(columns)
     elif selection_mode == "column":
-        return public_solution.verify_column(col)
+        rows = [public_solution[row][col] for row in range(dim_sq)]
+        logging.info(f"Checking column {rows}")
+        return public_solution.verify_area(rows)
     elif selection_mode == "box":
-        return public_solution.verify_box(col, row)
+        box = [public_solution[row + row_offset][col + col_offset] for row_offset in range(dim) for col_offset in range(dim)]
+        logging.info(f"Checking box {box}")
+        return public_solution.verify_area(box)
     elif selection_mode == "presets":
-        return public_solution.verify_shuffling(public_presets)
+        shuffled_values = [public_solution[row][col] for row in range(dim_sq) for col in range(dim_sq) if public_solution[row][col] > 0]
+        return public_presets.verify_shuffling(iter(shuffled_values))
     else:
         raise ValueError(f"Unknown selection mode: {selection_mode}")
 
@@ -327,9 +343,7 @@ if __name__ == "__main__":
     if not honest:
         secret_solution.falsify(1)
 
-    n_clues = math.ceil(dim_sq ** 2 * 0.2)
-    logging.info(f"Sudoku with {n_clues} clues")
-    public_presets = secret_solution.remove_values(dim_sq ** 2 - n_clues)
+    public_presets = secret_solution.to_puzzle()
     public_solution = public_presets  # Presets stay constant while the (partial) solution keeps changing
 
     # Visual board

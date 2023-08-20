@@ -2,9 +2,8 @@ import math
 import random
 import unittest
 import logging
-from typing import List, Tuple
+from typing import List, Tuple, Iterator
 from local.exact_cover import Matrix
-from local.graph import Mapping
 
 
 class Board:
@@ -34,7 +33,7 @@ class Board:
         self.dim = math.isqrt(self.dim_sq)
 
     def __repr__(self) -> str:
-        return repr(self.rows)
+        return "\n".join([repr(row) for row in self.rows])
 
     def __getitem__(self, row: int):
         return self.rows[row]
@@ -74,65 +73,34 @@ class Board:
 
         :return: board is valid solution
         """
-        for row in range(self.dim_sq):
-            if not self.verify_row(row):
+        for columns in self.rows:
+            if not self.verify_area(columns):
                 return False
 
         for col in range(self.dim_sq):
-            if not self.verify_column(col):
+            rows = [self.rows[row][col] for row in range(self.dim_sq)]
+            if not self.verify_area(rows):
                 return False
 
         for box_row in range(0, self.dim_sq, self.dim):
             for box_col in range(0, self.dim_sq, self.dim):
-                if not self.verify_box(box_row, box_col):
+                box = [self.rows[box_row + row_offset][box_col + col_offset]
+                       for row_offset in range(self.dim) for col_offset in range(self.dim)]
+                if not self.verify_area(box):
                     return False
 
         return True
 
-    def verify_row(self, row: int) -> bool:
+    def verify_area(self, area: List[int]) -> bool:
         """
-        Verify that a row is valid: It contains all values.
+        Verify that the area consists of unique, nonzero values.
 
-        :param row: row index
-        :return: row is valid
+        :param area: row, column or box
+        :return: area is valid
         """
-        if len(set(self.rows[row])) != self.dim_sq:
-            logging.info("Invalid row {}".format(self.rows[row]))
-            return False
-        else:
-            return True
+        return 0 not in area and len(set(area)) == self.dim_sq
 
-    def verify_column(self, col: int) -> bool:
-        """
-        Verify that a column is valid: It contains all values.
-
-        :param col: column index
-        :return: column is valid
-        """
-        column = {self.rows[row][col] for row in range(self.dim_sq)}
-        if len(column) != self.dim_sq:
-            logging.info("Invalid column {}".format(column))
-            return False
-        else:
-            return True
-
-    def verify_box(self, box_row: int, box_col: int) -> bool:
-        """
-        Verify that a column is valid: It contains all values.
-
-        :param box_row: box row index
-        :param box_col: box column index
-        :return: box is valid
-        """
-        box = {self.rows[box_row + row_offset][box_col + col_offset]
-               for row_offset in range(self.dim) for col_offset in range(self.dim)}
-        if len(box) != self.dim_sq:
-            logging.info("Invalid box {}".format(box))
-            return False
-        else:
-            return True
-
-    def verify_shuffling(self, other: "Board") -> bool:
+    def verify_shuffling(self, shuffled_values: Iterator[int]) -> bool:
         """
         Verify that this board is consistent with the other board.
 
@@ -140,22 +108,23 @@ class Board:
         If there is a mapping, then this board was obtained from the other one by shuffling values.
         If there is an inconsistency, then it is impossible to obtain this board from the other one.
 
-        :param other: other board
+        :param shuffled_values: iterator over nonzero values of other board
         :return: this board is consistent with other board
         """
         mapping = {}
 
-        for row, columns in enumerate(other.rows):
-            for col, other_value in enumerate(columns):
-                shuffled_value = self.rows[row][col]
+        for row, columns in enumerate(self.rows):
+            for col, original_value in enumerate(columns):
+                if original_value > 0:
+                    shuffled_value = next(shuffled_values)
 
-                if other_value in mapping:
-                    # Mapped same value to different values
-                    if mapping[other_value] != shuffled_value:
-                        logging.info("Mapped same value to different values")
-                        return False
-                else:
-                    mapping[other_value] = shuffled_value
+                    if original_value in mapping:
+                        # Mapped same value to different values
+                        if mapping[original_value] != shuffled_value:
+                            logging.info("Mapped same value to different values")
+                            return False
+                    else:
+                        mapping[original_value] = shuffled_value
 
         # Mapped different values to the same value
         if len(mapping.values()) != len(set(mapping.values())):
@@ -163,68 +132,6 @@ class Board:
             return False
 
         return True
-
-    def shuffle(self) -> "Board":
-        """
-        Randomly shuffle the values of this board.
-
-        :return: randomly shuffled board (copied)
-        """
-        mapping = Mapping.shuffle_list(list(range(1, self.dim_sq + 1)))
-        logging.debug("Mapping {}".format(mapping))
-        shuffled_board = [mapping.apply_list(row) for row in self.rows]
-        return Board(shuffled_board)
-
-    def reveal_row(self, row: int) -> "Board":
-        """
-        Reveal a single row of this board and hide everything else.
-
-        :param row: row index
-        :return: revealed board (copied)
-        """
-        revealed_board = Board.blank(self.dim)
-        revealed_board.rows[row] = self.rows[row]
-        return revealed_board
-
-    def reveal_column(self, col: int) -> "Board":
-        """
-        Reveal a single column of this board and hide everything else.
-
-        :param col: column index
-        :return: revealed board (copied)
-        """
-        revealed_board = Board.blank(self.dim)
-        for row in range(self.dim_sq):
-            revealed_board.rows[row][col] = self.rows[row][col]
-        return revealed_board
-
-    def reveal_box(self, box_row: int, box_col: int) -> "Board":
-        """
-        Reveal a single box of this board and hide everything else.
-
-        :param box_row: box row index
-        :param box_col: box column index
-        :return: revealed board (copied)
-        """
-        revealed_board = Board.blank(self.dim)
-        for row_offset in range(self.dim):
-            for col_offset in range(self.dim):
-                revealed_board.rows[box_row + row_offset][box_col + col_offset] = self.rows[box_row + row_offset][box_col + col_offset]
-        return revealed_board
-
-    def reveal_presets(self, presets: "Board") -> "Board":
-        """
-        Reveal all cells of this board that are nonempty in the presets, and hide everything else.
-
-        :param presets: board of presets
-        :return: revealed board (copied)
-        """
-        revealed_board = Board.blank(self.dim)
-        for row in range(self.dim_sq):
-            for col in range(self.dim_sq):
-                if presets.rows[row][col] > 0:
-                    revealed_board.rows[row][col] = self.rows[row][col]
-        return revealed_board
 
     def to_matrix(self) -> Matrix[Tuple[int, int, int], str]:
         """
@@ -302,6 +209,16 @@ class Board:
             rows[cell[0]][cell[1]] = 0
 
         return Board(rows)
+
+    def to_puzzle(self) -> "Board":
+        """
+        Convert a complete Sudoku solution into a partial solution by removing values.
+
+        :return: partial solution (copy)
+        """
+        n_clues = math.ceil(self.dim_sq ** 2 * 0.2)
+        logging.info(f"Sudoku with {n_clues} clues")
+        return self.remove_values(self.dim_sq ** 2 - n_clues)
 
     def falsify_row(self):
         """
