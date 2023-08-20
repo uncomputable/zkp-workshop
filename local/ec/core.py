@@ -161,9 +161,6 @@ class Coordinate(ModInt):
     """
     modulus = MAX_COORDINATE
 
-    def __init__(self, value):
-        super().__init__(value)
-
     def lift_x(self) -> Optional["AffinePoint"]:
         """
         Return curve point that corresponds to given x coordinate, if such point exists.
@@ -183,25 +180,25 @@ PARAMETER_B = Coordinate(3)
 
 class TestCoordinate(unittest.TestCase):
     def test_modulo(self):
-        x = random.randrange(0, MAX_COORDINATE)
+        x = random.randrange(MAX_COORDINATE)
         self.assertEqual(Coordinate(x) + Coordinate(MAX_COORDINATE - x), Coordinate(0))
 
     def test_inverse(self):
-        x = random.randrange(0, MAX_COORDINATE)
+        x = random.randrange(MAX_COORDINATE)
         self.assertEqual(Coordinate(x) * Coordinate(x).reciprocal(), Coordinate(1))
 
     def test_pow(self):
-        x = Coordinate(random.randrange(0, MAX_COORDINATE))
+        x = Coordinate(random.randrange(MAX_COORDINATE))
         self.assertEqual(x * x * x, x ** 3)
 
     def test_legendre_symbol(self):
-        for x in range(0, 100):
+        for x in range(MAX_COORDINATE):
             x = Coordinate(x)
             ls = x.legendre_symbol()
             self.assertTrue(ls == MINUS_ONE_COORDINATE or ls == 0 or ls == 1)
 
     def test_sqrt(self):
-        for x in range(0, 100):
+        for x in range(MAX_COORDINATE):
             y_squared = Coordinate(x)
             y = y_squared.sqrt()
 
@@ -373,7 +370,7 @@ class AffinePoint:
         # where we cannot compute the inverse of zero
         #
         # Usually this loop will run for one iteration
-        for i in range(0, NUMBER_POINTS):
+        for i in range(NUMBER_POINTS):
             # Loop invariant: p_i = a_i * ONE_POINT + b_i * self
             # Tortoise (gets a head start of i steps)
             p1, a1, b1 = Scalar(i) * ONE_POINT, Scalar(i), Scalar(0)
@@ -436,7 +433,6 @@ ZERO_POINT = AffinePoint(None, None)
 """
 Zero point
 """
-# ONE_POINT = None
 NUMBER_POINTS = 13
 """
 Total number of points on the curve
@@ -449,7 +445,7 @@ class TestAffinePoint(unittest.TestCase):
         one = points.next()
         p = ZERO_POINT
 
-        for _ in range(0, NUMBER_POINTS):
+        for _ in range(NUMBER_POINTS):
             self.assertTrue(p.is_on_curve())
             two_p = p.double()
             self.assertTrue(two_p.is_on_curve())
@@ -471,11 +467,11 @@ class TestAffinePoint(unittest.TestCase):
         one = points.next()
         p = ZERO_POINT
 
-        for _ in range(0, NUMBER_POINTS):
+        for _ in range(NUMBER_POINTS):
             self.assertTrue(p.is_on_curve())
             q = ZERO_POINT
 
-            for _ in range(0, NUMBER_POINTS):
+            for _ in range(NUMBER_POINTS):
                 self.assertTrue(q.is_on_curve())
                 p_plus_q = p + q
                 self.assertTrue(p_plus_q.is_on_curve())
@@ -500,7 +496,7 @@ class TestAffinePoint(unittest.TestCase):
     def test_negation(self):
         p = ZERO_POINT
 
-        for _ in range(0, NUMBER_POINTS):
+        for _ in range(NUMBER_POINTS):
             self.assertTrue(p.is_on_curve())
             minus_p = -p
             self.assertTrue(minus_p.is_on_curve())
@@ -515,17 +511,17 @@ class TestAffinePoint(unittest.TestCase):
     def test_scalar_mul(self):
         p = ZERO_POINT
 
-        for _ in range(0, NUMBER_POINTS):
+        for _ in range(NUMBER_POINTS):
             self.assertTrue(p.is_on_curve())
 
-            for j in range(0, NUMBER_POINTS):
+            for j in range(NUMBER_POINTS):
                 scalar_j = Scalar(j)
                 p_times_j = scalar_j * p
                 self.assertTrue(p_times_j.is_on_curve())
 
                 p_plus_dot_dot_dot_plus_p = ZERO_POINT
 
-                for _ in range(0, j):
+                for _ in range(j):
                     p_plus_dot_dot_dot_plus_p += p
 
                 self.assertEqual(p_times_j, p_plus_dot_dot_dot_plus_p)
@@ -538,7 +534,7 @@ class TestAffinePoint(unittest.TestCase):
     def test_discrete_log(self):
         p = ZERO_POINT
 
-        for _ in range(0, NUMBER_POINTS):
+        for _ in range(NUMBER_POINTS):
             self.assertTrue(p.is_on_curve())
             k = p.discrete_log()
             self.assertEqual(p, k * ONE_POINT)
@@ -624,7 +620,7 @@ class RandomPoints:
         """
         Return random non-zero curve point.
         """
-        for sub_index in range(0, self.max_sub_index):
+        for sub_index in range(self.max_sub_index):
             h = hashlib.sha256((self.index + sub_index).to_bytes(2, byteorder='big')).digest()
             x = Coordinate(int_from_bytes(h))
             p = x.lift_x()
@@ -656,7 +652,7 @@ class TestRandomPoints(unittest.TestCase):
 
     def test_seed(self):
         points = RandomPoints()
-        for _ in range(0, 10):
+        for _ in range(10):
             points.next()
         tenth = points.next()
 

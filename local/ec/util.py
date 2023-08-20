@@ -2,7 +2,7 @@ from typing import Tuple, List
 import unittest
 
 # Use this in conjunction with ec.core
-# from ec.core import Scalar, AffinePoint, ONE_POINT, NUMBER_POINTS
+# from local.ec.core import Scalar, AffinePoint, ONE_POINT, NUMBER_POINTS
 # Point = AffinePoint
 
 # Use this in conjunction with ec.static
