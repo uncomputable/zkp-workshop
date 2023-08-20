@@ -57,11 +57,29 @@ class Opening:
         """
         return commitment == self.close()
 
-    def serialize(self) -> Tuple[Scalar, Scalar]:
+    @classmethod
+    def batch_verify(cls, openings: "List[Opening]", commitments: List[Point]) -> bool:
+        """
+        Verify that the list of openings opens to the list of commitments (in order).
+        """
+        assert len(openings) == len(commitments)
+        for i in range(len(openings)):
+            if not openings[i].verify(commitments[i]):
+                return False
+        return True
+
+    def serialize(self, compact: int = NUMBER_POINTS) -> Tuple[int, int]:
         """
         Serialize the opening as it would be broadcast in an interactive proof.
         """
-        return self.v, self.r
+        return int(self.v) % compact, int(self.r) % compact
+
+    @classmethod
+    def batch_serialize(cls, openings: "List[Opening]", compact: int = NUMBER_POINTS) -> Tuple[Tuple[int, int], ...]:
+        """
+        Serialize a list of openings as they would be broadcast in an interactive proof.
+        """
+        return tuple([opening.serialize(compact) for opening in openings])
 
 
 class TestOpening(unittest.TestCase):

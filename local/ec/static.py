@@ -1,6 +1,8 @@
 import random
 from typing import Tuple, Union, List
 
+MAX_COORDINATE = 7
+MINUS_ONE_COORDINATE = MAX_COORDINATE - 1
 NUMBER_POINTS = 13
 
 
@@ -85,6 +87,23 @@ class CurvePoint:
         Randomly sample distinct points on the curve that are greater than one (not zero and not one).
         """
         return [CurvePoint(i) for i in random.sample(range(2, NUMBER_POINTS), n_sample)]
+
+    def serialize(self, compact: int = NUMBER_POINTS) -> int:
+        """
+        Serialize the point as an integer.
+        """
+        if self.is_zero():
+            return (MAX_COORDINATE ** 2) % compact
+        else:
+            x, y = self.xy()
+            return (x * MAX_COORDINATE + y) % compact
+
+    @classmethod
+    def batch_serialize(cls, points: "List[CurvePoint]", compact: int = NUMBER_POINTS) -> "Tuple[int, ...]":
+        """
+        Serialize a list of points as integers.
+        """
+        return tuple([point.serialize(compact) for point in points])
 
 
 ZERO_POINT = CurvePoint(0)
@@ -174,6 +193,19 @@ class Scalar:
         Return a uniformly random scalar.
         """
         return Scalar(random.randrange(NUMBER_POINTS))
+
+    def serialize(self, compact: int = NUMBER_POINTS) -> int:
+        """
+        Serialize the scalar as an integer.
+        """
+        return self.n % compact
+
+    @classmethod
+    def batch_serialize(cls, scalars: "List[Scalar]", compact: int = NUMBER_POINTS) -> "Tuple[int, ...]":
+        """
+        Serialize a list of scalars as an integer.
+        """
+        return tuple([scalar.serialize(compact) for scalar in scalars])
 
 
 XY = (None, (4, 2), (3, 3), (1, 2), (2, 5), (5, 3), (6, 3), (6, 4), (5, 4), (2, 2), (1, 5), (3, 4), (4, 5))
