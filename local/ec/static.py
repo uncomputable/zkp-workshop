@@ -61,7 +61,7 @@ class CurvePoint:
         """
         Return the discrete logarithm of the point.
 
-        This is a scalar n such that n * One = self.
+        This is a scalar n such that One * n = self.
         """
         return Scalar(self.n)
 

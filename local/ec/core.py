@@ -347,7 +347,7 @@ class AffinePoint:
 
     def discrete_log(self) -> Optional["Scalar"]:
         """
-        Return scalar k such that self = k * One (discrete logarithm).
+        Return scalar k such that self = One * k (discrete logarithm).
 
         Uses Pollard's rho algorithm.
 
@@ -371,26 +371,26 @@ class AffinePoint:
         #
         # Usually this loop will run for one iteration
         for i in range(NUMBER_POINTS):
-            # Loop invariant: p_i = a_i * ONE_POINT + b_i * self
+            # Loop invariant: p_i = ONE_POINT * a_i * self * b_i
             # Tortoise (gets a head start of i steps)
             p1, a1, b1 = ONE_POINT * Scalar(i), Scalar(i), Scalar(0)
-            # assert p1 == a1 * ONE_POINT + b1 * self
+            # assert p1 == ONE_POINT * a1 + self * b1
 
             # Hare (starts at step 0)
             p2, a2, b2 = ONE_POINT, Scalar(1), Scalar(0)
-            # assert p2 == a2 * ONE_POINT + b2 * self
+            # assert p2 == ONE_POINT * a2 + self * b2
 
             # Guaranteed to halt because group is cyclic and finite
             while True:
                 # Tortoise makes one step
                 p1, a1, b1 = step(p1, a1, b1)
-                # assert p1 == a1 * ONE_POINT + b1 * self
+                # assert p1 == ONE_POINT * a1 + self * b1
 
                 # Hare makes two steps
                 p2, a2, b2 = step(p2, a2, b2)
-                # assert p2 == a2 * ONE_POINT + b2 * self
+                # assert p2 == ONE_POINT * a2 + self * b2
                 p2, a2, b2 = step(p2, a2, b2)
-                # assert p2 == a2 * ONE_POINT + b2 * self
+                # assert p2 == ONE_POINT * a2 + self * b2
 
                 # Hare catches up to Tortoise (in cycle)
                 if p1 == p2:
