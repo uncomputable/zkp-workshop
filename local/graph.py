@@ -86,9 +86,9 @@ class Mapping(Generic[A, B]):
     def __repr__(self) -> str:
         return str(self.inner)
 
-    def __iter__(self) -> Iterator[Tuple[A, B]]:
-        for key, value in self.inner.items():
-            yield key, value
+    def __iter__(self) -> A:
+        for key in self.inner:
+            yield key
 
     def __getitem__(self, index: A) -> B:
         return self.inner[index]
