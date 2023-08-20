@@ -188,5 +188,5 @@ class Mapping(Generic[A, B]):
         :param second: second mapping
         :return: composed mapping
         """
-        inner = {k: second.inner[self.inner[k]] for k in self.inner if k in second.inner}
+        inner = {k: second.inner[self.inner[k]] for k in self.inner if self.inner[k] in second.inner}
         return Mapping(inner)
