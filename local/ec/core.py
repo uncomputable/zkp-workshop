@@ -323,7 +323,7 @@ class AffinePoint:
         """
         return self + -other
 
-    def __rmul__(self, scalar: "Scalar") -> Optional["AffinePoint"]:
+    def __mul__(self, scalar: "Scalar") -> Optional["AffinePoint"]:
         """
         Return scalar * self (scalar multiplication).
 
@@ -373,7 +373,7 @@ class AffinePoint:
         for i in range(NUMBER_POINTS):
             # Loop invariant: p_i = a_i * ONE_POINT + b_i * self
             # Tortoise (gets a head start of i steps)
-            p1, a1, b1 = Scalar(i) * ONE_POINT, Scalar(i), Scalar(0)
+            p1, a1, b1 = ONE_POINT * Scalar(i), Scalar(i), Scalar(0)
             # assert p1 == a1 * ONE_POINT + b1 * self
 
             # Hare (starts at step 0)
@@ -412,21 +412,21 @@ class AffinePoint:
 
         The integer n is internally scaled to the size of the curve.
         """
-        return Scalar.nth(n) * ONE_POINT
+        return ONE_POINT * Scalar.nth(n)
 
     @classmethod
     def random(cls) -> "AffinePoint":
         """
         Return a uniformly random point on the curve.
         """
-        return Scalar(random.randrange(NUMBER_POINTS)) * ONE_POINT
+        return ONE_POINT * Scalar(random.randrange(NUMBER_POINTS))
 
     @classmethod
     def sample_greater_one(cls, n_sample: int) -> "List[AffinePoint]":
         """
         Randomly sample distinct points on the curve that are greater than one (not zero and not one).
         """
-        return [Scalar(i) * ONE_POINT for i in random.sample(range(2, NUMBER_POINTS), n_sample)]
+        return [ONE_POINT * Scalar(i) for i in random.sample(range(2, NUMBER_POINTS), n_sample)]
 
 
 ZERO_POINT = AffinePoint(None, None)
@@ -516,7 +516,7 @@ class TestAffinePoint(unittest.TestCase):
 
             for j in range(NUMBER_POINTS):
                 scalar_j = Scalar(j)
-                p_times_j = scalar_j * p
+                p_times_j = p * scalar_j
                 self.assertTrue(p_times_j.is_on_curve())
 
                 p_plus_dot_dot_dot_plus_p = ZERO_POINT
@@ -537,7 +537,7 @@ class TestAffinePoint(unittest.TestCase):
         for _ in range(NUMBER_POINTS):
             self.assertTrue(p.is_on_curve())
             k = p.discrete_log()
-            self.assertEqual(p, k * ONE_POINT)
+            self.assertEqual(p, ONE_POINT * k)
 
             p += ONE_POINT
 
@@ -570,7 +570,7 @@ def number_points() -> Optional[int]:
 
     minus_one_point = -ONE_POINT
     k = minus_one_point.discrete_log()
-    assert k * ONE_POINT == minus_one_point
+    assert ONE_POINT * k == minus_one_point
     assert ONE_POINT + minus_one_point == ZERO_POINT
     assert minus_one_point + ONE_POINT == ZERO_POINT
     return k.value + 1
@@ -678,10 +678,3 @@ class Scalar(ModInt):
     Curve scalar.
     """
     modulus = NUMBER_POINTS
-
-    def __mul__(self, other):
-        # Python is too stupid to go straight to AffinePoint.__rmul__()
-        if isinstance(other, AffinePoint):
-            return other.__rmul__(self)
-        else:
-            return super().__mul__(other)

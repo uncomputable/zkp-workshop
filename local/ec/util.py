@@ -49,7 +49,7 @@ class Opening:
         """
         Return the commitment that corresponds to the opening.
         """
-        return self.r * self.h + self.v * self.g
+        return self.h * self.r + self.g * self.v
 
     def verify(self, commitment: Point) -> bool:
         """

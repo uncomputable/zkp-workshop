@@ -52,6 +52,9 @@ class CurvePoint:
     def __sub__(self, other: "CurvePoint") -> "CurvePoint":
         return CurvePoint((self.n - other.n) % NUMBER_POINTS)
 
+    def __mul__(self, other: "Scalar") -> "CurvePoint":
+        return CurvePoint((self.n * other.n) % NUMBER_POINTS)
+
     def discrete_log(self) -> "Scalar":
         """
         Return the discrete logarithm of the point.
@@ -137,13 +140,8 @@ class Scalar:
     def __sub__(self, other: "Scalar") -> "Scalar":
         return Scalar((self.n - other.n) % NUMBER_POINTS)
 
-    def __mul__(self, other):
-        ret = (self.n * other.n) % NUMBER_POINTS
-
-        if isinstance(other, CurvePoint):
-            return CurvePoint(ret)
-        else:
-            return Scalar(ret)
+    def __mul__(self, other: "Scalar") -> "Scalar":
+        return Scalar((self.n * other.n) % NUMBER_POINTS)
 
     def reciprocal(self) -> "Scalar":
         """
