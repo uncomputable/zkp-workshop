@@ -205,7 +205,10 @@ class AffinePoint:
         self.y = y
 
     def __repr__(self) -> str:
-        return repr(self.xy())
+        if self.is_zero():
+            return "(zero)"
+        else:
+            return repr(self.xy())
 
     def __hash__(self) -> hash:
         return hash((self.x, self.y))
