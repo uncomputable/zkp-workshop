@@ -1,12 +1,12 @@
-from typing import Tuple
+from typing import Tuple, List
 import unittest
 
 # Use this in conjunction with ec.core
-# from ec.core import Scalar, AffinePoint, ONE_POINT, random_scalar, random_point
+# from ec.core import Scalar, AffinePoint, ONE_POINT, NUMBER_POINTS
 # Point = AffinePoint
 
 # Use this in conjunction with ec.static
-from local.ec.static import Scalar, CurvePoint, ONE_POINT, random_scalar, random_point
+from local.ec.static import Scalar, CurvePoint, ONE_POINT, NUMBER_POINTS
 Point = CurvePoint
 
 
@@ -36,7 +36,7 @@ class Opening:
     def __init__(self, v: Scalar, g: Point, h: Point):
         self.v = v
         self.g = g
-        self.r = random_scalar()
+        self.r = Scalar.random()
         self.h = h
 
     def __repr__(self) -> str:
@@ -67,7 +67,7 @@ class Opening:
 class TestOpening(unittest.TestCase):
     def test_hiding(self):
         one_point = ONE_POINT
-        punto_uno = random_point()
+        punto_uno, = Point.sample_greater_one(1)
 
         v = Scalar(2)
         c1 = Opening(v, one_point, punto_uno)

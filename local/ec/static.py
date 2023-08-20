@@ -1,5 +1,5 @@
 import random
-from typing import Tuple, Union
+from typing import Tuple, Union, List
 
 NUMBER_POINTS = 13
 
@@ -59,6 +59,29 @@ class CurvePoint:
         This is a scalar n such that n * One = self.
         """
         return Scalar(self.n)
+
+    @classmethod
+    def nth(cls, n: int) -> "CurvePoint":
+        """
+        Return the n-th point on the curve.
+
+        The integer n is internally scaled to the size of the curve.
+        """
+        return CurvePoint(n % NUMBER_POINTS)
+
+    @classmethod
+    def random(cls) -> "CurvePoint":
+        """
+        Return a uniformly random point on the curve.
+        """
+        return CurvePoint(random.randrange(NUMBER_POINTS))
+
+    @classmethod
+    def sample_greater_one(cls, n_sample: int) -> "List[CurvePoint]":
+        """
+        Randomly sample distinct points on the curve that are greater than one (not zero and not one).
+        """
+        return [CurvePoint(i) for i in random.sample(range(2, NUMBER_POINTS), n_sample)]
 
 
 ZERO_POINT = CurvePoint(0)
@@ -138,22 +161,24 @@ class Scalar:
             power = power.n
         return Scalar(pow(self.n, power, NUMBER_POINTS))
 
+    @classmethod
+    def nth(cls, n: int) -> "Scalar":
+        """
+        Return the n-th scalar.
+
+        The integer n is internally scaled to the size of the curve.
+        """
+        return Scalar(n % NUMBER_POINTS)
+
+    @classmethod
+    def random(cls) -> "Scalar":
+        """
+        Return a uniformly random scalar.
+        """
+        return Scalar(random.randrange(NUMBER_POINTS))
+
 
 XY = (None, (4, 2), (3, 3), (1, 2), (2, 5), (5, 3), (6, 3), (6, 4), (5, 4), (2, 2), (1, 5), (3, 4), (4, 5))
 """
 List of xy coordinates of all points in order (zeroth, first, second, ...).
 """
-
-
-def random_point() -> CurvePoint:
-    """
-    Return a uniformly random point on the curve.
-    """
-    return CurvePoint(random.randrange(0, NUMBER_POINTS))
-
-
-def random_scalar() -> Scalar:
-    """
-    Return a uniformly random scalar.
-    """
-    return Scalar(random.randrange(0, NUMBER_POINTS))

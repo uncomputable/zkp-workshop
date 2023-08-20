@@ -1,5 +1,5 @@
 import random
-from typing import Optional, Tuple, Union
+from typing import Optional, Tuple, Union, List
 import hashlib
 import unittest
 
@@ -64,6 +64,22 @@ class ModInt:
 
     def __hash__(self) -> hash:
         return hash(self.value)
+
+    @classmethod
+    def nth(cls, n: int) -> "ModInt":
+        """
+        Return the nth modular integer.
+
+        The integer n is internally scaled to the right size.
+        """
+        return cls(n)
+
+    @classmethod
+    def random(cls) -> "ModInt":
+        """
+        Return a uniformly random modular integer.
+        """
+        return cls(random.randrange(cls.modulus))
 
     def legendre_symbol(self) -> int:
         """
@@ -392,6 +408,29 @@ class AffinePoint:
 
         raise ArithmeticError
 
+    @classmethod
+    def nth(cls, n: int) -> "AffinePoint":
+        """
+        Return the n-th point on the curve.
+
+        The integer n is internally scaled to the size of the curve.
+        """
+        return Scalar.nth(n) * ONE_POINT
+
+    @classmethod
+    def random(cls) -> "AffinePoint":
+        """
+        Return a uniformly random point on the curve.
+        """
+        return Scalar(random.randrange(NUMBER_POINTS)) * ONE_POINT
+
+    @classmethod
+    def sample_greater_one(cls, n_sample: int) -> "List[AffinePoint]":
+        """
+        Randomly sample distinct points on the curve that are greater than one (not zero and not one).
+        """
+        return [Scalar(i) * ONE_POINT for i in random.sample(range(2, NUMBER_POINTS), n_sample)]
+
 
 ZERO_POINT = AffinePoint(None, None)
 """
@@ -638,13 +677,6 @@ Global one point.
 """
 
 
-def random_point() -> AffinePoint:
-    """
-    Return random curve point.
-    """
-    return GLOBAL_POINTS.next()
-
-
 class Scalar(ModInt):
     """
     Curve scalar.
@@ -657,11 +689,3 @@ class Scalar(ModInt):
             return other.__rmul__(self)
         else:
             return super().__mul__(other)
-
-
-def random_scalar() -> Scalar:
-    """
-    Return random scalar.
-    """
-    n = random.randrange(0, NUMBER_POINTS)
-    return Scalar(n)
