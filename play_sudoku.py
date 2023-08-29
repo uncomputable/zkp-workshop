@@ -88,65 +88,65 @@ def inside_reject(x: int, y: int) -> bool:
     return reject_x_min <= x < reject_x_max and reject_y_min <= y < reject_y_max
 
 
-def get_selection(x: int, y: int, selection_mode: str) -> Tuple[int, int]:
+def get_selection(x: int, y: int, mode: str) -> Tuple[int, int]:
     """
     Return the area that the player selected.
 
     :param x: selected x coordinate
     :param y: selected y coordinate
-    :param selection_mode: row, column, box, preset
+    :param mode: row, column, box, preset
     :return: selected row and selected column
     """
     row, col = (y - board_y_min) // cell_visual_width, (x - board_x_min) // cell_visual_width
 
-    if selection_mode == "row" or selection_mode == "column":
+    if mode == "row" or mode == "column":
         return row, col
-    elif selection_mode == "box":
+    elif mode == "box":
         box_row = (row // dim) * dim
         box_col = (col // dim) * dim
         return box_row, box_col
-    elif selection_mode == "presets":
+    elif mode == "presets":
         return 0, 0  # Default
     else:
-        raise ValueError(f"Unknown selection mode: {selection_mode}")
+        raise ValueError(f"Unknown selection mode: {mode}")
 
 
-def highlight_selection(row: int, col: int, selection_mode: str):
+def highlight_selection(row: int, col: int, mode: str):
     """
     Highlight the area that the player selected.
 
     :param row: selected row
     :param col: selected column
-    :param selection_mode: row, column, box, presets
+    :param mode: row, column, box, presets
     """
-    if selection_mode == "row":
+    if mode == "row":
         x0 = board_x_min
         y0 = board_y_min + row * cell_visual_width
         x_offset = board_visual_width
         y_offset = cell_visual_width
-    elif selection_mode == "column":
+    elif mode == "column":
         x0 = board_x_min + col * cell_visual_width
         y0 = board_y_min
         x_offset = cell_visual_width
         y_offset = board_visual_width
-    elif selection_mode == "box":
+    elif mode == "box":
         start_row, start_col = (row // dim) * dim, (col // dim) * dim
         x0 = board_x_min + start_col * cell_visual_width
         y0 = board_y_min + start_row * cell_visual_width
         x_offset = cell_visual_width * dim
         y_offset = cell_visual_width * dim
-    elif selection_mode == "presets":
+    elif mode == "presets":
         x0 = board_x_min
         y0 = board_y_min
         x_offset = board_visual_width
         y_offset = board_visual_width
     else:
-        raise ValueError(f"Unknown selection mode: {selection_mode}")
+        raise ValueError(f"Unknown selection mode: {mode}")
 
     pygame.draw.rect(window, RED, (x0, y0, x_offset, y_offset))
 
 
-def reveal_partial_solution(row: int, col: int, selection_mode: str):
+def reveal_partial_solution(row: int, col: int, mode: str):
     """
     Update the public solution based on the area that the player selected.
 
@@ -156,56 +156,56 @@ def reveal_partial_solution(row: int, col: int, selection_mode: str):
 
     :param col: selected column
     :param row: selected row
-    :param selection_mode: row, column, box, presents
+    :param mode: row, column, box, presents
     """
     global public_solution
     secret_mapping = Mapping.shuffle_list(list(range(1, dim_sq + 1)))
     logging.debug(f"Secret mapping {secret_mapping}")
     public_solution = Board.blank(dim)
 
-    if selection_mode == "row":
+    if mode == "row":
         for col in range(dim_sq):
             public_solution[row][col] = secret_mapping[secret_solution[row][col]]
-    elif selection_mode == "column":
+    elif mode == "column":
         for row in range(dim_sq):
             public_solution[row][col] = secret_mapping[secret_solution[row][col]]
-    elif selection_mode == "box":
+    elif mode == "box":
         for row_offset in range(dim):
             for col_offset in range(dim):
                 public_solution[row + row_offset][col + col_offset] = secret_mapping[secret_solution[row + row_offset][col + col_offset]]
-    elif selection_mode == "presets":
+    elif mode == "presets":
         for row in range(dim_sq):
             for col in range(dim_sq):
                 if public_presets[row][col] > 0:
                     public_solution[row][col] = secret_mapping[secret_solution[row][col]]
 
 
-def verify_partial_solution(row: int, col: int, selection_mode: str) -> bool:
+def verify_partial_solution(row: int, col: int, mode: str) -> bool:
     """
     Verify that the revealed partial solution is valid.
 
     :param row: selected row
     :param col: selected column
-    :param selection_mode: row, column, box, presents
+    :param mode: row, column, box, presents
     :return: partial solution is valid
     """
-    if selection_mode == "row":
+    if mode == "row":
         columns = [public_solution[row][col] for col in range(dim_sq)]
         logging.info(f"Checking row {columns}")
         return public_solution.verify_area(columns)
-    elif selection_mode == "column":
+    elif mode == "column":
         rows = [public_solution[row][col] for row in range(dim_sq)]
         logging.info(f"Checking column {rows}")
         return public_solution.verify_area(rows)
-    elif selection_mode == "box":
+    elif mode == "box":
         box = [public_solution[row + row_offset][col + col_offset] for row_offset in range(dim) for col_offset in range(dim)]
         logging.info(f"Checking box {box}")
         return public_solution.verify_area(box)
-    elif selection_mode == "presets":
+    elif mode == "presets":
         shuffled_values = [public_solution[row][col] for row in range(dim_sq) for col in range(dim_sq) if public_solution[row][col] > 0]
         return public_presets.verify_shuffling(iter(shuffled_values))
     else:
-        raise ValueError(f"Unknown selection mode: {selection_mode}")
+        raise ValueError(f"Unknown selection mode: {mode}")
 
 
 def player_wins(accept: bool) -> bool:
@@ -228,13 +228,13 @@ def run_game():
     Requires the global variables to be set beforehand for configuration.
     """
     round_number = 1
-    selection_mode = "row"
+    mode = "row"
     game_state = "playing"
 
     while True:
         window.fill(WHITE)
         x, y = pygame.mouse.get_pos()
-        row, col = get_selection(x, y, selection_mode)
+        row, col = get_selection(x, y, mode)
 
         for event in pygame.event.get():
             # Always allow player to quit
@@ -246,13 +246,13 @@ def run_game():
                 continue
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                    selection_mode = "row"
+                    mode = "row"
                 elif event.key == pygame.K_2:
-                    selection_mode = "column"
+                    mode = "column"
                 elif event.key == pygame.K_3:
-                    selection_mode = "box"
+                    mode = "box"
                 elif event.key == pygame.K_4:
-                    selection_mode = "presets"
+                    mode = "presets"
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if inside_accept(x, y) or inside_reject(x, y):
                     if inside_accept(x, y):
@@ -265,9 +265,9 @@ def run_game():
                     else:
                         game_state = "lose"
                 elif inside_board(x, y):
-                    reveal_partial_solution(row, col, selection_mode)
+                    reveal_partial_solution(row, col, mode)
 
-                    if not verify_partial_solution(row, col, selection_mode):
+                    if not verify_partial_solution(row, col, mode):
                         game_state = "win"
                     else:
                         round_number += 1
@@ -283,7 +283,7 @@ def run_game():
         else:
             # Board
             if inside_board(x, y):
-                highlight_selection(row, col, selection_mode)
+                highlight_selection(row, col, mode)
 
             draw_grid()
             draw_public_solution()
