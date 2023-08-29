@@ -1,5 +1,5 @@
 import random
-from typing import Tuple, Union, List
+from typing import Tuple, Union, List, Iterable
 
 MAX_COORDINATE = 7
 MINUS_ONE_COORDINATE = MAX_COORDINATE - 1
@@ -99,7 +99,7 @@ class CurvePoint:
             return (x * MAX_COORDINATE + y) % compact
 
     @classmethod
-    def batch_serialize(cls, points: "List[CurvePoint]", compact: int = NUMBER_POINTS) -> "Tuple[int, ...]":
+    def batch_serialize(cls, points: "Iterable[CurvePoint]", compact: int = NUMBER_POINTS) -> "Tuple[int, ...]":
         """
         Serialize a list of points as integers.
         """
@@ -201,7 +201,7 @@ class Scalar:
         return self.n % compact
 
     @classmethod
-    def batch_serialize(cls, scalars: "List[Scalar]", compact: int = NUMBER_POINTS) -> "Tuple[int, ...]":
+    def batch_serialize(cls, scalars: "Iterable[Scalar]", compact: int = NUMBER_POINTS) -> "Tuple[int, ...]":
         """
         Serialize a list of scalars as an integer.
         """

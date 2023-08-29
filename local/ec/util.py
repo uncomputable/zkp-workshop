@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, Iterable
 import unittest
 
 # Use this in conjunction with ec.core
@@ -75,7 +75,7 @@ class Opening:
         return int(self.v) % compact, int(self.r) % compact
 
     @classmethod
-    def batch_serialize(cls, openings: "List[Opening]", compact: int = NUMBER_POINTS) -> Tuple[Tuple[int, int], ...]:
+    def batch_serialize(cls, openings: "Iterable[Opening]", compact: int = NUMBER_POINTS) -> Tuple[Tuple[int, int], ...]:
         """
         Serialize a list of openings as they would be broadcast in an interactive proof.
         """
