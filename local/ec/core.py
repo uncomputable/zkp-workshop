@@ -228,7 +228,7 @@ class AffinePoint:
 
     def is_zero(self) -> bool:
         """
-        Return whether self is the zero point.
+        Return whether self is the zero-point.
         """
         return self.x is None
 
@@ -246,7 +246,7 @@ class AffinePoint:
         """
         Return x and y coordinates of self, if they exist.
 
-        The zero point has no coordinates.
+        The zero-point has no coordinates.
         """
         if self.is_zero():
             return None
@@ -431,7 +431,7 @@ class AffinePoint:
 
 ZERO_POINT = AffinePoint(None, None)
 """
-Zero point
+Zero-point
 """
 NUMBER_POINTS = 13
 """
@@ -551,11 +551,11 @@ def int_from_bytes(b: bytes) -> int:
 
 def reset_one_point(point: AffinePoint):
     """
-    Set the one point to the given point.
+    Set the one-point to the given point.
 
     **Warning: This changes the definition of scalar multiplication and the discrete logarithm!**
-    These methods will return different outputs for different definitions of the one point.
-    All previous results are invalid for a different one point.
+    These methods will return different outputs for different definitions of the one-point.
+    All previous results are invalid for a different one-point.
     """
     global ONE_POINT
     ONE_POINT = point
@@ -669,7 +669,7 @@ Global sequence of random non-zero curve points.
 """
 ONE_POINT = GLOBAL_POINTS.next()
 """
-Global one point.
+Global one-point.
 """
 
 

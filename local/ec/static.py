@@ -108,19 +108,19 @@ class CurvePoint:
 
 ZERO_POINT = CurvePoint(0)
 """
-Zero point. That is the zeroth point on the curve or the point with a discrete logarithm of zero.
+Zero-point. That is the zeroth point on the curve or the point with a discrete logarithm of zero.
 
-The zero point is always the same.
+The zero-point is always the same.
 """
 ONE_POINT = CurvePoint(1)
 """
-One point. That is the first point on the curve or the point with a discrete logarithm of one.
+One-point. That is the first point on the curve or the point with a discrete logarithm of one.
 
-Note that the choice of the one point is arbitrary.
-On our particular curve, every non-zero point could be the one point.
-The other points are numbered according to how many times the one point was added onto itself to arrive at that point.
+Note that the choice of the one-point is arbitrary.
+On our particular curve, every non-zero point could be the one-point.
+The other points are numbered according to how many times the one-point was added onto itself to arrive at that point.
 
-The static EC module has a hardcoded one point.
+The static EC module has a hardcoded one-point.
 """
 
 
