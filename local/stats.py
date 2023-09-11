@@ -110,19 +110,27 @@ def plot_comparison(this: List, other: List, this_label: str = "this", other_lab
 
     this_counter = Counter(this)
     other_counter = Counter(other)
-    bins = set(this_counter.keys()).union(set(other_counter.keys()))
+    bins = list(set(this_counter.keys()).union(set(other_counter.keys())))
+    bins.sort(key=lambda x: -this_counter.get(x, 0))
     bin_ids = range(len(bins))
 
     this_counts = np.array([this_counter[b] if b in this_counter else 0 for b in bins])
     other_counts = np.array([other_counter[b] if b in other_counter else 0 for b in bins])
     distance = np.abs(this_counts - other_counts)
 
-    plt.scatter(bin_ids, this_counts, label=this_label)
-    plt.scatter(bin_ids, other_counts, label=other_label)
-    plt.scatter(bin_ids, distance, label="absolute distance")
-    plt.ylim(ymin=0)
-    plt.legend()
-    plt.title("Comparison of two distributions")
-    plt.xlabel("Sample form (integer ID)")
-    plt.ylabel("Sample count")
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
+
+    ax1.scatter(bin_ids, other_counts, label=other_label)
+    ax1.scatter(bin_ids, this_counts, label=this_label)
+    ax1.set_ylim(ymin=0)
+    ax1.legend()
+    ax1.set_title(f"Comparison of two distributions")
+    ax1.set_xlabel("Sample form (integer ID)")
+    ax1.set_ylabel(f"Sample count (decreasing for {this_label})")
+
+    ax2.bar(bin_ids, distance, label="absolute distance")
+    ax2.set_title("Distance of both distributions")
+    ax2.set_xlabel("Sample form (integer ID)")
+    ax2.set_ylabel("Absolute distance of sample count")
+
     plt.show()
