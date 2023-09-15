@@ -1,19 +1,19 @@
-# Zero-Knowledge Proof Workshop
+# Getting to Know Zero-Knowledge
 
-Everyone talks about zero-knowledge proofs (ZKP), but who understands them? How can a proof consist of bytes, information, without leaking any knowledge? Why should I trust such a proof?
+Everyone talks about zero-knowledge proofs (ZKP), but who understands them? How can a proof consist of bytes without leaking any knowledge? Why should I trust such a proof?
 
 ## What this is
 
-This is a workshop where we go over the fundamentals and build small ZKP systems in Python. There will a hint of math, but I made a point of explaining the background in everyday language and as simple as I can. There is also code for everything we do here.
+This is a workshop about ZKP written in Python. We use Jupyter as our interactive learning environment. The notebooks cover fundamentals, applications and much more. Go through them in any order you want. Do what interests you and skip everything else. It's a lot of fun :)
 
 ## What this _isn't_
 
-We will not learn how to build the latest and shiniest crypto. We will not build SNARKs, STARKs or validity rollups. You will not be able to use the code in security-critical areas (we intentionally use insecure parameters to facilitate the learning process).
+We will not cover the latest and shiniest crypto. We will not build SNARKs, STARKs or validity rollups. The code you will see will not live up to the highest security standards _(we intentionally use insecure parameters to facilitate the learning process)_.
 
 ## Rationale
 
-To build intuition, we must start small and work our way up. This stuff is hard, but there is a method to the madness. My goal is to make ZKP seem less like magic and more like trustworthy math. Once there is understanding, you can take what you learned here and apply it to real problems.
-  
+Master the basics first, then move to the advanced stuff; that is my philosophy. Let's build an intuition of how ZKP works. We start small and work our way up. Things become simpler when we deconstruct them into their constituent parts. Divide and conquer. Once there is understanding, you can take what you learned here and apply it to real problems.
+
 ## Building
 
 We have come a long way since this workshop used sagemath (1 GB). The new dependencies should not take more than 50 MB :)
@@ -37,25 +37,29 @@ pip install -r requirements.txt
 
 ## Running
 
-Run jupyter on the command line which will open a browser window. Then select a chapter to read.
+Run Jupyter on the command line.
 
 ```
 jupyter notebook
 ```
 
-## Structure
+A browser window will open. Then select a chapter to read.
 
-There are many ways through this workshop.
+## Recommended chapter order
 
-Look at what interests you, what is new to you, and skip the rest.
+Start with the [foundations on interactive proofs](https://github.com/uncomputable/zkp-workshop/blob/master/foundations/interactive_proofs.ipynb). This is a must read.
 
-Chapters 01 to 09 are foundations of elliptic curves and interactive proof systems. We also cover what zero-knowledge and other terms mean. This is a good place to start.
+Read at least the TL;DR of the [foundations on elliptic curves](https://github.com/uncomputable/zkp-workshop/blob/master/foundations/elliptic_curves.ipynb).
 
-Chapters 10 to 19 are about how ZKP can be applied to graph problems. These problems are pretty simple compared to other applications.
+Then look at the [Schnorr identification protocol](https://github.com/uncomputable/zkp-workshop/blob/master/easy/schnorr.ipynb), which is one of the easiest ZKPs.
+
+From there you can choose between [games](https://github.com/uncomputable/zkp-workshop/tree/master/games) or [graph problems](https://github.com/uncomputable/zkp-workshop/tree/master/graphs).
+
+You will need the [foundations on commitments](https://github.com/uncomputable/zkp-workshop/blob/master/foundations/commitments.ipynb).
 
 ## Extras
 
-### Hardness of discrete logarithm
+### Hardness of the discrete logarithm
 
 See how the curve points jump in 2D space as you iterate through the curve.
 
@@ -63,61 +67,22 @@ See how the curve points jump in 2D space as you iterate through the curve.
 python3 hardness_dlog.py
 ```
 
-### Generate critical chi-square values
+### Playing Sudoku
 
-Generate critical chi-square values for a range of degrees of freedom and a given significance level.
-
-Edit the script to change settings.
-
-Use this to update the constant `CRITICAL_CHI_SQUARE_VALUES` in stats.py.
+Play the side of Victor in an interactive proof of knowledge of a Sudoku solution. Accept or reject. Peggy might be lying!
 
 ```
-python3 generate-chi-square.py
+python3 play_sudoku.py
 ```
 
-The script requires scipy, which can be installed via nix-shell
+### Customization
 
-```
-nix-shell --arg withScipy true
-```
+Look at [the documentation](https://github.com/uncomputable/zkp-workshop/blob/master/customization.md) for how to further customize the workshop.
 
-or via pip
-
-```
-pip install scipy
-```
-
-### Generate EC lookup tables
-
-Generate the lookup tables we use to speed up EC operations.
-
-```
-python3 ec/generate-lookup-tables.py
-```
-
-### Generate curves
-
-Generate parameters of elliptic curves that are similar to secp256k1.
-
-Edit the script to change settings.
-
-```
-sage ec/generate-curve.sage
-```
-
-This script requires sage (oh no), but you almost never want to run it anyway.
-
-You can install sage easily via nix-shell.
-
-```
-nix-shell -p sage
-```
-
-If you use pip and the package manager, I guess you can use the [official instructions](https://doc.sagemath.org/html/en/installation/index.html). Good luck :)
-
-## Further reading
+## Recommended reading
 
 - [Number theory explained from first principles](https://explained-from-first-principles.com/number-theory/)
 - [Tackling bulletproofs](https://github.com/uncomputable/tackling-bulletproofs)
-- [From zero (knowledge) to bulletproofs](https://github.com/AdamISZ/from0k2bp)
-- [Lecture on graph problems](https://resources.mpi-inf.mpg.de/departments/d1/teaching/ss13/gitcs/lecture9.pdf)
+- [ZKP explained in 3 examples](https://www.circularise.com/blogs/zero-knowledge-proofs-explained-in-3-examples)
+- [Computer scientist explains ZKP in 5 levels of difficulty](https://www.youtube.com/watch?v=fOGdb1CTu5c)
+- [How to explain ZKP to your children](https://pages.cs.wisc.edu/~mkowalcz/628.pdf)
