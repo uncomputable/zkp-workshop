@@ -45,17 +45,17 @@ jupyter notebook
 
 A browser window will open. Then select a chapter to read.
 
-## Recommended chapter order
+## Chapter dependencies
 
-Start with the [foundations on interactive proofs](https://github.com/uncomputable/zkp-workshop/blob/master/foundations/interactive_proofs.ipynb). This is a must read.
+Some chapters depend on lessons from other chapters.
 
-Read at least the TL;DR of the [foundations on elliptic curves](https://github.com/uncomputable/zkp-workshop/blob/master/foundations/elliptic_curves.ipynb).
+Start with chapters that depend on nothing else and work your way up the dependency tree, towards more advanced chapters.
 
-Then look at the [Schnorr identification protocol](https://github.com/uncomputable/zkp-workshop/blob/master/easy/schnorr.ipynb), which is one of the easiest ZKPs.
+Skip / skim lessons you already know. Look at what interests you and ignore everything else. Have fun :)
 
-From there you can choose between [games](https://github.com/uncomputable/zkp-workshop/tree/master/games) or [graph problems](https://github.com/uncomputable/zkp-workshop/tree/master/graphs).
+In the following diagram, each chapter points towards the chapters that it depends upon.
 
-You will need the [foundations on commitments](https://github.com/uncomputable/zkp-workshop/blob/master/foundations/commitments.ipynb).
+![Chapter dependency tree](chapter-dependencies.png)
 
 ## Extras
 

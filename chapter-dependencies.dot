@@ -1,0 +1,25 @@
+digraph {
+ranksep=3;
+
+"Schnorr" -> {
+    "Elliptic Curves"
+    "Interactive Proofs"
+};
+"Commitments" -> {
+    "Interactive Proofs"
+    "Elliptic Curves"
+};
+"Graph Isomorphism" -> {
+    "Interactive Proofs"
+};
+"Graph Nonisomorphism" -> {
+    "Interactive Proofs"
+};
+"Graph Colorability" -> {
+    "Commitments"
+};
+"Sudoku" -> {
+    "Commitments"
+};
+
+}
