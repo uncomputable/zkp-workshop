@@ -1,4 +1,5 @@
 import random
+import unittest
 from typing import Tuple, Union, List, Iterable
 
 MAX_COORDINATE = 7
@@ -212,3 +213,19 @@ XY = (None, (4, 2), (3, 3), (1, 2), (2, 5), (5, 3), (6, 3), (6, 4), (5, 4), (2, 
 """
 List of xy coordinates of all points in order (zeroth, first, second, ...).
 """
+
+
+class TestCurvePoint(unittest.TestCase):
+    def test_illegal_mul(self):
+        # Scalar(a) * CurvePoint(b) = Scalar(a * b)
+        # This multiplication is illegal because it requires knowledge of the discrete logarithm
+        # We could solve the discrete logarithm problem if we had this multiplication
+        # There are no type errors because we omit isinstance checks, which would be slow
+        x = Scalar(2) * CurvePoint(3)
+        self.assertEqual(Scalar(6), x)
+
+        # CurvePoint(b) * Scalar(a) = CurvePoint(a * b)
+        # This is proper scalar multiplication
+        # The inner value is the same as above but the containing class is different
+        y = CurvePoint(3) * Scalar(2)
+        self.assertEqual(CurvePoint(6), y)
