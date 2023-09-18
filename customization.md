@@ -36,7 +36,7 @@ It will directly overwrite the Python files inside the repository after asking y
 
 ## Generate EC lookup tables
 
-Most elliptic curve operations use static lookup tables. It is much easier to treat curve points as literal integers instead of 2D points with arithmtic properties. The catch is that we need to know the discrete logarithm. It works for us because we use small curves.
+Most elliptic curve operations use static lookup tables. It is much easier to treat curve points as literal integers instead of 2D points with arithmetic properties. The catch is that we need to know the discrete logarithm. It works for us because we use small curves.
 
 In real life, the curves would be too large to make lookups feasible. The lookup table would be larger than the number of atoms in the universe. Keep this in mind.
 
