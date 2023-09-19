@@ -4,7 +4,7 @@ Everyone talks about zero-knowledge proofs (ZKP), but who understands them? How 
 
 ## What this is
 
-This is a workshop about ZKP written in Python. We use Jupyter as our interactive learning environment. The notebooks cover fundamentals, applications and much more. Go through them in any order you want. Do what interests you and skip everything else. It's a lot of fun :)
+This is a workshop about ZKP written in Python. We use Jupyter as our interactive learning environment. The notebooks cover fundamentals, applications and much more. Go through them in any order you want. Do what interests you and skip everything else. It's a lot of fun 😜
 
 ## What this _isn't_
 
@@ -16,7 +16,7 @@ Master the basics first, then move to the advanced stuff; that is my philosophy.
 
 ## Build the workshop
 
-We have come a long way since this workshop used sagemath (1 GB). The new dependencies should not take more than 50 MB :)
+We have come a long way since this workshop used sagemath (1 GB). The new dependencies should not take more than 50 MB 🍃
 
 ### Use nix
 
@@ -51,7 +51,7 @@ Some chapters depend on lessons from other chapters.
 
 Start with chapters that depend on nothing else and work your way down the dependency tree, towards more advanced chapters.
 
-Skip / skim lessons you already know. Look at what interests you and ignore everything else. Have fun :)
+Skip / skim lessons you already know. Look at what interests you and ignore everything else. Have fun 🤓
 
 ![Chapter dependency tree](chapter-dependencies.svg)
 
@@ -91,7 +91,7 @@ Let's turn this workshop into the best it can be 🚀
 
 There is a lot more to learn about ZKP.
 
-Check out these external resources. Happy learning :)
+Check out these external resources. Happy learning 🧠
 
 - [Number theory explained from first principles](https://explained-from-first-principles.com/number-theory/)
 - [Tackling bulletproofs](https://github.com/uncomputable/tackling-bulletproofs)
