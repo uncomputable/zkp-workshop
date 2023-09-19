@@ -49,11 +49,9 @@ A browser window will open. Then select a chapter to read.
 
 Some chapters depend on lessons from other chapters.
 
-Start with chapters that depend on nothing else and work your way up the dependency tree, towards more advanced chapters.
+Start with chapters that depend on nothing else and work your way down the dependency tree, towards more advanced chapters.
 
 Skip / skim lessons you already know. Look at what interests you and ignore everything else. Have fun :)
-
-In the following diagram, each chapter points towards the chapters that it depends upon.
 
 ![Chapter dependency tree](chapter-dependencies.png)
 

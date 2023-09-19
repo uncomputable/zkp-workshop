@@ -1,25 +1,42 @@
 digraph {
 ranksep=3;
 
-"Schnorr" -> {
-    "Elliptic Curves"
-    "Interactive Proofs"
+// Legend
+subgraph legend {
+    a [style=invis];
+    b [style=invis];
+    c [style=invis];
+    d [style=invis];
+    a -> b [label="Chapter dependency", color="darkgray"];
+    c -> d [label="Recommended path", color="blue"];
+}
+
+// Chapter dependencies
+edge[color="darkgray"]
+
+"Interactive Proofs" -> {
+    "Easy/Schnorr"
+    "Commitments"
+    "Graph/Nonisomorphism"
+    "Graph/Isomorphism"
 };
 "Commitments" -> {
-    "Interactive Proofs"
-    "Elliptic Curves"
+    "Graph/Colorability"
+    "Game/Sudoku"
 };
-"Graph Isomorphism" -> {
-    "Interactive Proofs"
-};
-"Graph Nonisomorphism" -> {
-    "Interactive Proofs"
-};
-"Graph Colorability" -> {
+"Elliptic Curves" -> {
+    "Easy/Schnorr"
     "Commitments"
 };
-"Sudoku" -> {
-    "Commitments"
-};
+
+// Recommended path
+edge[color="blue", constraint=false]
+
+"Interactive Proofs"
+-> "Elliptic Curves"
+-> "Easy/Schnorr"
+-> "Graph/Nonisomorphism"
+-> "Commitments"
+-> "Game/Sudoku";
 
 }
