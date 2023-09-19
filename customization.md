@@ -24,12 +24,12 @@ The chi-square test uses a significance which is implicitly encoded in the criti
 
 There is one chi-square value for each number of degrees of freedom. We generated values up to a maximum number.
 
-Edit [this script](https://github.com/uncomputable/zkp-workshop/blob/master/generate-chi-square.py) to change these parameters.
+Edit [this script](https://github.com/uncomputable/zkp-workshop/blob/master/generate_chi_square.py) to change these parameters.
 
 Run the script on the command line.
 
 ```
-python3 generate-chi-square.py
+python3 generate_chi_square.py
 ```
 
 It will directly overwrite the Python files inside the repository after asking you for confirmation.
@@ -45,7 +45,7 @@ Run this script to generate the static lookup tables.
 This is especially useful after you changed the curve we work on (see below).
 
 ```
-python3 generate-lookup-tables.py
+python3 generate_lookup_tables.py
 ```
 
 It will directly overwrite the Python files inside the repository after asking you for confirmation.
@@ -68,12 +68,12 @@ The parameters of the elliptic curve we use are defined in [the core EC implemen
 
 This is a small elliptic curve which is similar to [secp256k1](https://en.bitcoin.it/wiki/Secp256k1).
 
-Edit [this script](https://github.com/uncomputable/zkp-workshop/blob/master/generate-curve.sage) to change these parameters.
+Edit [this script](https://github.com/uncomputable/zkp-workshop/blob/master/generate_curve.sage) to change these parameters.
 
 Run the script on the command line.
 
 ```
-sage generate-curve.sage
+sage generate_curve.sage
 ```
 
 It will directly overwrite the Python files inside the repository after asking you for confirmation.

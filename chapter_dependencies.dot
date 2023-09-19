@@ -14,29 +14,29 @@ subgraph legend {
 // Chapter dependencies
 edge[color="darkgray"]
 
-"Interactive Proofs" -> {
+"Basis/Interactive Proofs" -> {
     "Easy/Schnorr"
-    "Commitments"
+    "Basis/Commitments"
     "Graph/Nonisomorphism"
     "Graph/Isomorphism"
 };
-"Commitments" -> {
+"Basis/Commitments" -> {
     "Graph/Colorability"
     "Game/Sudoku"
 };
-"Elliptic Curves" -> {
+"Basis/Elliptic Curves" -> {
     "Easy/Schnorr"
-    "Commitments"
+    "Basis/Commitments"
 };
 
 // Recommended path
 edge[color="blue", constraint=false]
 
-"Interactive Proofs"
--> "Elliptic Curves"
+"Basis/Interactive Proofs"
+-> "Basis/Elliptic Curves"
 -> "Easy/Schnorr"
 -> "Graph/Nonisomorphism"
--> "Commitments"
+-> "Basis/Commitments"
 -> "Game/Sudoku";
 
 }

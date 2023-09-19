@@ -53,7 +53,7 @@ Start with chapters that depend on nothing else and work your way down the depen
 
 Skip / skim lessons you already know. Look at what interests you and ignore everything else. Have fun 🤓
 
-![Chapter dependency tree](chapter-dependencies.svg)
+![Chapter dependency tree](chapter_dependencies.svg)
 
 ## Explore extra content
 
