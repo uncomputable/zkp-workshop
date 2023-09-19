@@ -79,6 +79,14 @@ python3 play_sudoku.py
 
 Look at [the documentation](https://github.com/uncomputable/zkp-workshop/blob/master/customization.md) for how to further customize the workshop.
 
+## Improve the workshop
+
+If you see errors or room for improvement, then feel free to open a Github issue.
+
+Pull requests are also welcome.
+
+Let's turn this workshop into the best it can be 🚀
+
 ## Continue your journey
 
 There is a lot more to learn about ZKP.
