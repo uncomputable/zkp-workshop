@@ -60,7 +60,11 @@ def chi_square_equal(this: List, other: List) -> bool:
         if this_counts[i] < 5 or other_counts[i] < 5:
             bad_bins += 1
     bad_rate = bad_bins / len(bins) * 100
-    print("{} out of {} bins were almost empty ({:0.2f}%)".format(bad_bins, len(bins), bad_rate))
+    print(f"{bad_bins} out of {len(bins)} bins were almost empty ({bad_rate:0.2f}%).")
+    if bad_rate > 0.75:
+        print("The test is invalid if there are too many empty bins!")
+        print("Increase the number of samples.")
+    print()
 
     # Compute the expected counts:
     #
@@ -84,12 +88,12 @@ def chi_square_equal(this: List, other: List) -> bool:
     other_chi_square = np.sum((other_counts - expected_counts) ** 2 / expected_counts)
     # Sum all χ² values
     observed_chi_square = this_chi_square + other_chi_square
-    print("χ² = {:0.2f}".format(observed_chi_square))
+    print(f"χ² = {observed_chi_square:0.2f}")
 
     degrees_freedom = len(bins) - 1
-    print("Degrees of freedom = {}".format(degrees_freedom))
+    print(f"Degrees of freedom = {degrees_freedom}")
     critical_chi_square = CRITICAL_CHI_SQUARE_VALUES[degrees_freedom - 1]
-    print("Critical χ² = {:0.2f}".format(critical_chi_square))
+    print(f"Critical χ² = {critical_chi_square:0.2f}")
 
     return critical_chi_square >= observed_chi_square
 
