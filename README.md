@@ -14,11 +14,11 @@ We will not cover the latest and shiniest crypto. We will not build SNARKs, STAR
 
 Master the basics first, then move to the advanced stuff; that is my philosophy. Let's build an intuition for how ZKP works. We start small and work our way up. Things become simpler when we break them down into their constituent parts. Divide and conquer. Once there is understanding, we can take what we learned here and apply it to real problems.
 
-## Building
+## Build the workshop
 
 We have come a long way since this workshop used sagemath (1 GB). The new dependencies should not take more than 50 MB :)
 
-### Using nix
+### Use nix
 
 Use the provided nix shell to set up the runtime environment.
 
@@ -26,7 +26,7 @@ Use the provided nix shell to set up the runtime environment.
 nix-shell
 ```
 
-### Using pip and package manager
+### Use pip and the package manager
 
 Create a virtual environment and use pip to install the dependencies.
 
@@ -35,7 +35,7 @@ python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Running
+## Run the workshop
 
 Run Jupyter on the command line.
 
@@ -45,7 +45,7 @@ jupyter notebook
 
 A browser window will open. Then select a chapter to read.
 
-## Chapter dependencies
+## Read the chapters
 
 Some chapters depend on lessons from other chapters.
 
@@ -55,17 +55,19 @@ Skip / skim lessons you already know. Look at what interests you and ignore ever
 
 ![Chapter dependency tree](chapter-dependencies.svg)
 
-## Extras
+## Explore extra content
 
-### Hardness of the discrete logarithm
+### See why the discrete logarithm is hard
 
 See how the curve points jump in 2D space as you iterate through the curve.
+
+This is explained in more detail in the chapter on elliptic curves.
 
 ```
 python3 hardness_dlog.py
 ```
 
-### Playing Sudoku
+### Play Sudoku
 
 Play the side of Victor in an interactive proof of knowledge of a Sudoku solution. Accept or reject. Peggy might be lying!
 
@@ -73,11 +75,15 @@ Play the side of Victor in an interactive proof of knowledge of a Sudoku solutio
 python3 play_sudoku.py
 ```
 
-### Customization
+### Customize the workshop
 
 Look at [the documentation](https://github.com/uncomputable/zkp-workshop/blob/master/customization.md) for how to further customize the workshop.
 
-## Recommended reading
+## Continue your journey
+
+There is a lot more to learn about ZKP.
+
+Check out these external resources. Happy learning :)
 
 - [Number theory explained from first principles](https://explained-from-first-principles.com/number-theory/)
 - [Tackling bulletproofs](https://github.com/uncomputable/tackling-bulletproofs)
