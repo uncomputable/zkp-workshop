@@ -4,7 +4,7 @@ Everyone talks about zero-knowledge proofs (ZKP), but who understands them? How 
 
 ## What this is
 
-This is a workshop about ZKP written in Python. We use Jupyter as our interactive learning environment. The notebooks cover fundamentals, applications and much more. Go through them in any order you want. Do what interests you and skip everything else. It's a lot of fun 😜
+This is a workshop about ZKP written in Python. We use Jupyter as our interactive learning environment. Each notebook is a chapter. The chapters cover fundamentals, applications and much more. Explore and have fun 😜
 
 ## What this _isn't_
 
