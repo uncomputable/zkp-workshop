@@ -4,7 +4,7 @@ You can change the parameters used in this workshop and recompute the hardcoded 
 
 Some of these functions require additional dependencies to work.
 
-## Running with Scipy
+## Run with Scipy
 
 Scipy can be installed via nix-shell
 
@@ -50,7 +50,7 @@ python3 generate_lookup_tables.py
 
 It will directly overwrite the Python files inside the repository after asking you for confirmation.
 
-## Running with Sage
+## Run with Sage
 
 Oh, no. You almost never want to run Sage :O
 
