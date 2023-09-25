@@ -14,9 +14,21 @@ We will not cover the latest and shiniest crypto. We will not build SNARKs, STAR
 
 Master the basics first, then move to the advanced stuff; that is my philosophy. Let's build an intuition for how ZKP works. We start small and work our way up. Things become simpler when we break them down into their constituent parts. Divide and conquer. Once there is understanding, we can take what we learned here and apply it to real problems 💪
 
-## Build the workshop
+## Run the workshop
 
-We have come a long way since this workshop Sage (1 GB). The new dependencies should not take more than 50 MB 🍃
+Run the workshop online (binder) or locally (nix or pip).
+
+We have come a long way since this workshop Sage (1 GB). The new dependencies take up less than 50 MB 🍃
+
+See below how to set up the workshop.
+
+Then select a chapter to read 📖
+
+### Use binder
+
+Click the binder badge and wait for the workshop to be built on the server.
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/uncomputable/zkp-workshop/master)
 
 ### Use nix
 
@@ -26,7 +38,13 @@ Use the provided nix shell to set up the runtime environment.
 nix-shell
 ```
 
-### Use pip and the package manager
+Run Jupyter on the command line.
+
+```
+jupyter notebook
+```
+
+### Use pip
 
 Create a virtual environment and use pip to install the dependencies.
 
@@ -35,15 +53,11 @@ python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Run the workshop
-
 Run Jupyter on the command line.
 
 ```
 jupyter notebook
 ```
-
-A browser window will open. Then select a chapter to read 📖
 
 ## Read the chapters
 
