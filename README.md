@@ -12,7 +12,23 @@ We will not cover the latest and shiniest crypto. We will not build SNARKs, STAR
 
 ## Rationale
 
-Master the basics first, then move to the advanced stuff; that is my philosophy. Let's build an intuition for how ZKP works. We start small and work our way up. Things become simpler when we break them down into their constituent parts. Divide and conquer. Once there is understanding, we can take what we learned here and apply it to real problems 💪
+Master the basics first, then move to the advanced stuff; that is my philosophy. Let's build an intuition for how ZKP works. We start small and work our way up. Things becomesimpler when we break them down into their constituent parts. Divide and conquer. Once there is understanding, we can take what we learned here and apply it to real problems 💪
+
+## Benefits of zero-knowledge proofs
+
+Zero-knowledge proofs have clear benefits compared to ordinary plain-text proofs. These properties might seem impossible and have the potential to change our world.
+
+### Compact
+
+Proofs grow logarithmically in size. If you double the size of the data, then the size of the proof grows by a single bit. This means, we can **compress data beyond entropy**!
+
+### Fast
+
+Proofs take logarithmic time to verify. If you double the number of steps of a computation, then the verification of the proof only takes one step longer! This means, we can **compress computations**!
+
+### Zero-knowledge
+
+Proofs reveal no information. Everything that is sent over the wire is randomized. This means, we can **work on private data without revealing it**!
 
 ## Run the workshop
 
