@@ -48,10 +48,10 @@ Click the binder badge and wait for the workshop to be built on the server.
 
 ### Use nix
 
-Use the provided nix shell to set up the runtime environment.
+Use the provided nix flake to set up the runtime environment.
 
 ```
-nix-shell
+nix develop
 ```
 
 Run Jupyter on the command line.

@@ -6,10 +6,10 @@ Some of these functions require additional dependencies to work.
 
 ## Run with Scipy
 
-Scipy can be installed via nix-shell
+Scipy can be installed via nix
 
 ```
-nix-shell --arg withScipy true
+nix develop .#scipy
 ```
 
 or via pip
@@ -54,10 +54,10 @@ It will directly overwrite the Python files inside the repository after asking y
 
 Oh, no. You almost never want to run Sage :O
 
-You can install Sage easily via nix-shell.
+You can install Sage easily via nix.
 
 ```
-nix-shell -p sage
+nix develop .#sage
 ```
 
 If you use pip and the package manager, I guess you can use the [official instructions](https://doc.sagemath.org/html/en/installation/index.html). Good luck :)
