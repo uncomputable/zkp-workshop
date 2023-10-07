@@ -1,6 +1,7 @@
 from typing import Callable, TypeVar, Tuple
 import os
 import re
+import sys
 
 T = TypeVar("T")
 
@@ -21,9 +22,9 @@ def update_variables(file_path: str, patterns: Tuple[Callable[[T], str], ...], u
         raise ValueError("Need as many patterns as updated values")
 
     updates = [patterns[i](updated_values[i]) for i in range(len(patterns))]
-    apply = input(f"Do you want to apply the update to {file_path}? y/n: ")
+    apply = input(f"Do you want to apply the update to {file_path}? [y,n,q]: ").lower()
 
-    if apply.lower() == "y":
+    if apply == "y":
         with open(file_path, "r") as f:
             file_data = f.read()
 
@@ -39,8 +40,10 @@ def update_variables(file_path: str, patterns: Tuple[Callable[[T], str], ...], u
             f.write(file_data)
 
         print(f"Successfully updated {file_path}")
+    elif apply == "q":
+        sys.exit(0)
     else:
-        do_print = input("Print updated values? y/n: ")
+        do_print = input("Print updated values? [y,n,q]: ")
         if do_print.lower() == "y":
             for update in updates:
                 print(update)
