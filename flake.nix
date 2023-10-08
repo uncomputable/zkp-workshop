@@ -26,22 +26,26 @@
       scipyDeps = with python.pkgs; coreDeps ++ [
         scipy
       ];
-      makePythonShell = deps: pkgs.mkShell {
-        packages = [
-          (python.withPackages (ps: deps))
-        ];
-      };
-      makeSageShell = deps: pkgs.mkShell {
-        packages = pkgs.lib.optionals (!pkgs.stdenv.isDarwin) [
-          pkgs.sage
-        ];
-      };
+      corePython = python.withPackages (_: coreDeps);
+      scipyPython = python.withPackages (_: scipyDeps);
     in
     {
       devShells = {
-        default = makePythonShell coreDeps;
-        scipy = makePythonShell scipyDeps;
-        sage = makeSageShell [];
+        default = pkgs.mkShell {
+          packages = [ corePython ];
+        };
+        scipy = pkgs.mkShell {
+          packages = [ scipyPython ];
+        };
+        sage = pkgs.mkShell {
+          # Sage is not available on macOS
+          packages = pkgs.lib.optionals (!pkgs.stdenv.isDarwin) [ pkgs.sage ];
+        };
+      };
+      packages = {
+        default = pkgs.writeShellScriptBin "jupyter" ''
+          ${corePython}/bin/python -m notebook
+        '';
       };
     }
   );
