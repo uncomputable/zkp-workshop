@@ -12,7 +12,7 @@ We will not cover the latest and shiniest crypto. We will not build SNARKs, STAR
 
 ## Rationale
 
-Master the basics first, then move to the advanced stuff; that is my philosophy. Let's build an intuition for how ZKP works. We start small and work our way up. Things becomesimpler when we break them down into their constituent parts. Divide and conquer. Once there is understanding, we can take what we learned here and apply it to real problems 💪
+Master the basics first, then move to the advanced stuff; that is my philosophy. Let's build an intuition for how ZKP works. We start small and work our way up. Things become simpler when we break them down into their constituent parts. Divide and conquer. Once there is understanding, we can take what we learned here and apply it to real problems 💪
 
 ## Benefits of zero-knowledge proofs
 
