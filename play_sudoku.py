@@ -79,7 +79,7 @@ def inside_accept(x: int, y: int) -> bool:
 
 def inside_reject(x: int, y: int) -> bool:
     """
-    Check whether the coordinates are inside the accept button
+    Check whether the coordinates are inside the reject button
 
     :param x: x coordinate
     :param y: y coordinate
